@@ -2,9 +2,10 @@ module Update exposing (update)
 
 import Json.Profile exposing (encodeProfileData)
 import Model exposing (Model, Msg(..), authorizationEndpoint)
+import Navigation
 import OAuth
 import OAuth.Implicit
-import Ports.LocalStorage exposing (storageSetItem)
+import Ports.LocalStorage exposing (storageClear, storageSetItem)
 
 
 -- Update is pretty straightforward.
@@ -26,6 +27,9 @@ update msg ({ oauth } as model) =
 
         NewProfile profile ->
             { model | profile = Just profile } ! []
+
+        Logout ->
+            { model | profile = Nothing, token = Nothing } ! [ storageClear (), Navigation.modifyUrl "" ]
 
         Authorize ->
             model

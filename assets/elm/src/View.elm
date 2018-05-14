@@ -76,6 +76,7 @@ view model =
                             ]
                             []
                         , text <| profileData.profile.fullName ++ " <" ++ profileData.profile.username ++ ">"
+                        , a [ onClick Logout ] [ text "Logout" ]
                         ]
     in
     div

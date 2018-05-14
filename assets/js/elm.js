@@ -11865,6 +11865,7 @@ var _user$project$Model$Model = F4(
 	function (a, b, c, d) {
 		return {oauth: a, error: b, token: c, profile: d};
 	});
+var _user$project$Model$Logout = {ctor: 'Logout'};
 var _user$project$Model$NewProfile = function (a) {
 	return {ctor: 'NewProfile', _0: a};
 };
@@ -12410,6 +12411,22 @@ var _user$project$Update$update = F2(
 							profile: _elm_lang$core$Maybe$Just(_p2._0)
 						}),
 					{ctor: '[]'});
+			case 'Logout':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						_p5,
+						{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
+					{
+						ctor: '::',
+						_0: _user$project$Ports_LocalStorage$storageClear(
+							{ctor: '_Tuple0'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$navigation$Navigation$modifyUrl(''),
+							_1: {ctor: '[]'}
+						}
+					});
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -12606,7 +12623,22 @@ var _user$project$View$view = function (model) {
 									_elm_lang$core$Basics_ops['++'],
 									' <',
 									A2(_elm_lang$core$Basics_ops['++'], _p1.profile.username, '>')))),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Model$Logout),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Logout'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				});
 		}

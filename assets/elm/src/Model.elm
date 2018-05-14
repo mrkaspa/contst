@@ -49,3 +49,4 @@ type Msg
     | Authorize
     | GetProfile (Result Http.Error ProfileData)
     | NewProfile ProfileData
+    | Logout
