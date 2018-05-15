@@ -2,7 +2,7 @@ module Init exposing (init)
 
 import Http
 import Json.Profile exposing (profileData)
-import Model exposing (Model, Msg(..), profileEndpoint)
+import Model exposing (AuthMsg(..), Model, Msg(..), profileEndpoint)
 import Navigation
 import OAuth
 import OAuth.Implicit
@@ -38,7 +38,7 @@ init location =
             in
             { model | token = Just token }
                 ! [ Navigation.modifyUrl model.oauth.redirectUri
-                  , Http.send GetProfile req
+                  , Http.send (Auth << GetProfile) req
                   ]
 
         Err OAuth.Empty ->

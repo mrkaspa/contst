@@ -11865,6 +11865,10 @@ var _user$project$Model$Model = F4(
 	function (a, b, c, d) {
 		return {oauth: a, error: b, token: c, profile: d};
 	});
+var _user$project$Model$Auth = function (a) {
+	return {ctor: 'Auth', _0: a};
+};
+var _user$project$Model$Nop = {ctor: 'Nop'};
 var _user$project$Model$Logout = {ctor: 'Logout'};
 var _user$project$Model$NewProfile = function (a) {
 	return {ctor: 'NewProfile', _0: a};
@@ -11873,7 +11877,6 @@ var _user$project$Model$GetProfile = function (a) {
 	return {ctor: 'GetProfile', _0: a};
 };
 var _user$project$Model$Authorize = {ctor: 'Authorize'};
-var _user$project$Model$Nop = {ctor: 'Nop'};
 
 var _user$project$OAuth_Decode$makeToken = F2(
 	function (mtoken, tokenType) {
@@ -12230,7 +12233,8 @@ var _user$project$Ports_LocalStorage$receiveLocalStorage = function (keyVal) {
 	if ((_p0.ctor === '_Tuple2') && (_p0._0 === 'profile')) {
 		var _p1 = A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Json_Profile$profileData, _p0._1);
 		if (_p1.ctor === 'Ok') {
-			return _user$project$Model$NewProfile(_p1._0);
+			return _user$project$Model$Auth(
+				_user$project$Model$NewProfile(_p1._0));
 		} else {
 			return _user$project$Model$Nop;
 		}
@@ -12295,14 +12299,14 @@ var _user$project$Init$init = function (location) {
 	};
 	var _p0 = _user$project$OAuth_Implicit$parse(location);
 	if (_p0.ctor === 'Ok') {
-		var _p1 = _p0._0.token;
+		var _p2 = _p0._0.token;
 		var req = _elm_lang$http$Http$request(
 			{
 				method: 'GET',
 				body: _elm_lang$http$Http$emptyBody,
 				withCredentials: false,
 				headers: {ctor: '[]'},
-				url: _user$project$Model$profileEndpoint(_p1),
+				url: _user$project$Model$profileEndpoint(_p2),
 				expect: _elm_lang$http$Http$expectJson(_user$project$Json_Profile$profileData),
 				timeout: _elm_lang$core$Maybe$Nothing
 			});
@@ -12311,14 +12315,20 @@ var _user$project$Init$init = function (location) {
 			_elm_lang$core$Native_Utils.update(
 				model,
 				{
-					token: _elm_lang$core$Maybe$Just(_p1)
+					token: _elm_lang$core$Maybe$Just(_p2)
 				}),
 			{
 				ctor: '::',
 				_0: _elm_lang$navigation$Navigation$modifyUrl(model.oauth.redirectUri),
 				_1: {
 					ctor: '::',
-					_0: A2(_elm_lang$http$Http$send, _user$project$Model$GetProfile, req),
+					_0: A2(
+						_elm_lang$http$Http$send,
+						function (_p1) {
+							return _user$project$Model$Auth(
+								_user$project$Model$GetProfile(_p1));
+						},
+						req),
 					_1: {ctor: '[]'}
 				}
 			});
@@ -12363,95 +12373,98 @@ var _user$project$Init$init = function (location) {
 var _user$project$Update$update = F2(
 	function (msg, _p0) {
 		var _p1 = _p0;
-		var _p5 = _p1;
+		var _p6 = _p1;
 		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'Nop':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p5,
-					{ctor: '[]'});
-			case 'GetProfile':
-				var _p3 = _p2._0;
-				if (_p3.ctor === 'Err') {
+		if (_p2.ctor === 'Nop') {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_p6,
+				{ctor: '[]'});
+		} else {
+			var _p3 = _p2._0;
+			switch (_p3.ctor) {
+				case 'GetProfile':
+					var _p4 = _p3._0;
+					if (_p4.ctor === 'Err') {
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								_p6,
+								{
+									error: _elm_lang$core$Maybe$Just('unable to fetch user profile ¯\\_(ツ)_/¯')
+								}),
+							{ctor: '[]'});
+					} else {
+						var _p5 = _p4._0;
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							_elm_lang$core$Native_Utils.update(
+								_p6,
+								{
+									profile: _elm_lang$core$Maybe$Just(_p5)
+								}),
+							{
+								ctor: '::',
+								_0: _user$project$Ports_LocalStorage$storageSetItem(
+									{
+										ctor: '_Tuple2',
+										_0: 'profile',
+										_1: _user$project$Json_Profile$encodeProfileData(_p5)
+									}),
+								_1: {ctor: '[]'}
+							});
+					}
+				case 'NewProfile':
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
-							_p5,
+							_p6,
 							{
-								error: _elm_lang$core$Maybe$Just('unable to fetch user profile ¯\\_(ツ)_/¯')
+								profile: _elm_lang$core$Maybe$Just(_p3._0)
 							}),
 						{ctor: '[]'});
-				} else {
-					var _p4 = _p3._0;
+				case 'Logout':
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
-							_p5,
-							{
-								profile: _elm_lang$core$Maybe$Just(_p4)
-							}),
+							_p6,
+							{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
 						{
 							ctor: '::',
-							_0: _user$project$Ports_LocalStorage$storageSetItem(
+							_0: _user$project$Ports_LocalStorage$storageClear(
+								{ctor: '_Tuple0'}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$navigation$Navigation$modifyUrl(''),
+								_1: {ctor: '[]'}
+							}
+						});
+				default:
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_p6,
+						{
+							ctor: '::',
+							_0: _user$project$OAuth_Implicit$authorize(
 								{
-									ctor: '_Tuple2',
-									_0: 'profile',
-									_1: _user$project$Json_Profile$encodeProfileData(_p4)
+									clientId: _p6.oauth.clientId,
+									redirectUri: _p6.oauth.redirectUri,
+									responseType: _user$project$OAuth$Token,
+									scope: {
+										ctor: '::',
+										_0: 'basic',
+										_1: {
+											ctor: '::',
+											_0: 'public_content',
+											_1: {ctor: '[]'}
+										}
+									},
+									state: _elm_lang$core$Maybe$Nothing,
+									url: _user$project$Model$authorizationEndpoint
 								}),
 							_1: {ctor: '[]'}
 						});
-				}
-			case 'NewProfile':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						_p5,
-						{
-							profile: _elm_lang$core$Maybe$Just(_p2._0)
-						}),
-					{ctor: '[]'});
-			case 'Logout':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						_p5,
-						{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
-					{
-						ctor: '::',
-						_0: _user$project$Ports_LocalStorage$storageClear(
-							{ctor: '_Tuple0'}),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$navigation$Navigation$modifyUrl(''),
-							_1: {ctor: '[]'}
-						}
-					});
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p5,
-					{
-						ctor: '::',
-						_0: _user$project$OAuth_Implicit$authorize(
-							{
-								clientId: _p5.oauth.clientId,
-								redirectUri: _p5.oauth.redirectUri,
-								responseType: _user$project$OAuth$Token,
-								scope: {
-									ctor: '::',
-									_0: 'basic',
-									_1: {
-										ctor: '::',
-										_0: 'public_content',
-										_1: {ctor: '[]'}
-									}
-								},
-								state: _elm_lang$core$Maybe$Nothing,
-								url: _user$project$Model$authorizationEndpoint
-							}),
-						_1: {ctor: '[]'}
-					});
+			}
 		}
 	});
 
@@ -12464,7 +12477,8 @@ var _user$project$View$view = function (model) {
 					_elm_lang$html$Html$form,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onSubmit(_user$project$Model$Authorize),
+						_0: _elm_lang$html$Html_Events$onSubmit(
+							_user$project$Model$Auth(_user$project$Model$Authorize)),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Attributes$style(
@@ -12526,7 +12540,8 @@ var _user$project$View$view = function (model) {
 									}),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Model$Authorize),
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Model$Auth(_user$project$Model$Authorize)),
 									_1: {ctor: '[]'}
 								}
 							},
@@ -12629,7 +12644,8 @@ var _user$project$View$view = function (model) {
 								_elm_lang$html$Html$a,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Model$Logout),
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Model$Auth(_user$project$Model$Logout)),
 									_1: {ctor: '[]'}
 								},
 								{

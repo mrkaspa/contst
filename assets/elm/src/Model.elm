@@ -46,7 +46,11 @@ type alias Model =
 
 type Msg
     = Nop
-    | Authorize
+    | Auth AuthMsg
+
+
+type AuthMsg
+    = Authorize
     | GetProfile (Result Http.Error ProfileData)
     | NewProfile ProfileData
     | Logout

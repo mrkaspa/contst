@@ -3,7 +3,7 @@ module View exposing (view)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Model exposing (Model, Msg(..))
+import Model exposing (AuthMsg(..), Model, Msg(..))
 
 
 ---------------------------------------
@@ -25,7 +25,7 @@ view model =
             case ( model.token, model.profile ) of
                 ( Nothing, Nothing ) ->
                     Html.form
-                        [ onSubmit Authorize
+                        [ onSubmit (Auth Authorize)
                         , style
                             [ ( "flex-direction", "column" )
                             ]
@@ -43,7 +43,7 @@ view model =
                                 , ( "padding", "1em 1em 1em 3em" )
                                 , ( "text-align", "right" )
                                 ]
-                            , onClick Authorize
+                            , onClick (Auth Authorize)
                             ]
                             [ text "Sign in" ]
                         ]
@@ -76,7 +76,7 @@ view model =
                             ]
                             []
                         , text <| profileData.profile.fullName ++ " <" ++ profileData.profile.username ++ ">"
-                        , a [ onClick Logout ] [ text "Logout" ]
+                        , a [ onClick (Auth Logout) ] [ text "Logout" ]
                         ]
     in
     div
