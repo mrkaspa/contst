@@ -28,8 +28,9 @@ defmodule ContstWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/contst_web/templates",
-                        namespace: ContstWeb
+      use Phoenix.View,
+        root: "lib/contst_web/templates",
+        namespace: ContstWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
@@ -40,6 +41,14 @@ defmodule ContstWeb do
       import ContstWeb.Router.Helpers
       import ContstWeb.ErrorHelpers
       import ContstWeb.Gettext
+
+      def render("empty.json", _) do
+        %{}
+      end
+
+      def errors_to_json(changeset) do
+        Ecto.Changeset.traverse_errors(changeset, &:erlang.element(1, &1))
+      end
     end
   end
 

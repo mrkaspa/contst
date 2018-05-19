@@ -3,11 +3,11 @@ module Auth.Profile
         ( Counts
         , Profile
         , ProfileData
-        , ProfileRequest
+        , ProfileRequestData
         , encodeProfileData
-        , encodeProfileRequest
+        , encodeProfileRequestData
         , profileData
-        , profileRequest
+        , profileRequestData
         )
 
 import Json.Decode as Jdec
@@ -39,7 +39,7 @@ type alias Counts =
     }
 
 
-type alias ProfileRequest =
+type alias ProfileRequestData =
     { username : String
     , token : String
     }
@@ -75,9 +75,9 @@ profile =
         |> Jpipe.required "counts" counts
 
 
-profileRequest : Jdec.Decoder ProfileRequest
-profileRequest =
-    Jpipe.decode ProfileRequest
+profileRequestData : Jdec.Decoder ProfileRequestData
+profileRequestData =
+    Jpipe.decode ProfileRequestData
         |> Jpipe.required "id" Jdec.string
         |> Jpipe.required "username" Jdec.string
 
@@ -128,8 +128,8 @@ encodeCounts x =
         ]
 
 
-encodeProfileRequest : ProfileRequest -> Jenc.Value
-encodeProfileRequest x =
+encodeProfileRequestData : ProfileRequestData -> Jenc.Value
+encodeProfileRequestData x =
     Jenc.object
         [ ( "username", Jenc.string x.username )
         , ( "token", Jenc.string x.token )

@@ -15,13 +15,18 @@ defmodule ContstWeb.UserController do
     |> Repo.insert_or_update()
     |> case do
       {:ok, user} ->
-        conn
-        |> render("create.json", user: user)
+        render(conn, "create.json", user: user)
 
-      {:error, %Ecto.Changeset{errors: errors}} ->
+      {:error, %Ecto.Changeset{} = changeset} ->
         conn
-        |> put_status(:forbidden)
-        |> render("create.json", errors: errors)
+        |> put_status(:bad_request)
+        |> render("create.json", changeset: changeset)
     end
+  end
+
+  def create(conn, _params) do
+    conn
+    |> put_status(:bad_request)
+    |> render("empty.json")
   end
 end

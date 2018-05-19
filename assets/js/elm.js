@@ -11543,7 +11543,7 @@ var _truqu$elm_base64$Base64$encode = function (s) {
 					_truqu$elm_base64$Base64$toCodeList(s)))));
 };
 
-var _user$project$Auth_Profile$encodeProfileRequest = function (x) {
+var _user$project$Auth_Profile$encodeProfileRequestData = function (x) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
@@ -11733,11 +11733,11 @@ var _user$project$Auth_Profile$profileData = A3(
 	'data',
 	_user$project$Auth_Profile$profile,
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileData));
-var _user$project$Auth_Profile$ProfileRequest = F2(
+var _user$project$Auth_Profile$ProfileRequestData = F2(
 	function (a, b) {
 		return {username: a, token: b};
 	});
-var _user$project$Auth_Profile$profileRequest = A3(
+var _user$project$Auth_Profile$profileRequestData = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'username',
 	_elm_lang$core$Json_Decode$string,
@@ -11745,7 +11745,7 @@ var _user$project$Auth_Profile$profileRequest = A3(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 		'id',
 		_elm_lang$core$Json_Decode$string,
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequest)));
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequestData)));
 
 var _user$project$OAuth_OAuth$showErrCode = function (err) {
 	var _p0 = err;
@@ -12317,12 +12317,19 @@ var _user$project$Ports_LocalStorage$storageRemoveFromSet = _elm_lang$core$Nativ
 		return [v._0, v._1];
 	});
 
+var _user$project$Utils_Helper$send = function (msg) {
+	return A2(
+		_elm_lang$core$Task$perform,
+		_elm_lang$core$Basics$identity,
+		_elm_lang$core$Task$succeed(msg));
+};
+
 var _user$project$Auth_Update$createOrUpdateProfile = F2(
 	function (profile, token) {
 		var _p0 = token;
 		if (_p0.ctor === 'Just') {
 			var body = _elm_lang$http$Http$jsonBody(
-				_user$project$Auth_Profile$encodeProfileRequest(
+				_user$project$Auth_Profile$encodeProfileRequestData(
 					{username: profile.profile.username, token: _p0._0._0}));
 			return A2(
 				_elm_lang$http$Http$send,
@@ -12330,7 +12337,7 @@ var _user$project$Auth_Update$createOrUpdateProfile = F2(
 					return _user$project$Model$Auth(
 						_user$project$Model$ProfileRequest(_p1));
 				},
-				A3(_elm_lang$http$Http$post, '', body, _user$project$Auth_Profile$profileRequest));
+				A3(_elm_lang$http$Http$post, '/api/users', body, _user$project$Auth_Profile$profileRequestData));
 		} else {
 			return _elm_lang$core$Platform_Cmd$none;
 		}
@@ -12338,26 +12345,17 @@ var _user$project$Auth_Update$createOrUpdateProfile = F2(
 var _user$project$Auth_Update$update = F2(
 	function (msg, _p2) {
 		var _p3 = _p2;
-		var _p7 = _p3;
+		var _p9 = _p3;
 		var _p4 = msg;
 		switch (_p4.ctor) {
 			case 'GetProfile':
 				var _p5 = _p4._0;
-				if (_p5.ctor === 'Err') {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							_p7,
-							{
-								error: _elm_lang$core$Maybe$Just('unable to fetch user profile')
-							}),
-						{ctor: '[]'});
-				} else {
+				if (_p5.ctor === 'Ok') {
 					var _p6 = _p5._0;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
-							_p7,
+							_p9,
 							{
 								profile: _elm_lang$core$Maybe$Just(_p6)
 							}),
@@ -12375,12 +12373,21 @@ var _user$project$Auth_Update$update = F2(
 								_1: {ctor: '[]'}
 							}
 						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							_p9,
+							{
+								error: _elm_lang$core$Maybe$Just('unable to fetch user profile')
+							}),
+						{ctor: '[]'});
 				}
 			case 'ProfileLoaded':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
-						_p7,
+						_p9,
 						{
 							profile: _elm_lang$core$Maybe$Just(_p4._0)
 						}),
@@ -12389,7 +12396,7 @@ var _user$project$Auth_Update$update = F2(
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
-						_p7,
+						_p9,
 						{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
 					{
 						ctor: '::',
@@ -12404,13 +12411,13 @@ var _user$project$Auth_Update$update = F2(
 			case 'Authorize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p7,
+					_p9,
 					{
 						ctor: '::',
 						_0: _user$project$OAuth_Implicit$authorize(
 							{
-								clientId: _p7.oauth.clientId,
-								redirectUri: _p7.oauth.redirectUri,
+								clientId: _p9.oauth.clientId,
+								redirectUri: _p9.oauth.redirectUri,
 								responseType: _user$project$OAuth_OAuth$Token,
 								scope: {
 									ctor: '::',
@@ -12427,10 +12434,28 @@ var _user$project$Auth_Update$update = F2(
 						_1: {ctor: '[]'}
 					});
 			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p7,
-					{ctor: '[]'});
+				var _p7 = _p4._0;
+				if (_p7.ctor === 'Ok') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_p9,
+						{ctor: '[]'});
+				} else {
+					var _p8 = A2(_elm_lang$core$Debug$log, 'err req = ', _p7._0);
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							_p9,
+							{
+								error: _elm_lang$core$Maybe$Just('unable create profile')
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Utils_Helper$send(
+								_user$project$Model$Auth(_user$project$Model$Logout)),
+							_1: {ctor: '[]'}
+						});
+				}
 		}
 	});
 
