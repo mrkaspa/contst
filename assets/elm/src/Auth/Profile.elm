@@ -7,16 +7,13 @@ module Auth.Profile
         , ProfileRequestResponse
         , encodeProfileData
         , encodeProfileRequestData
-        , encodeProfileRequestResponse
         , profileData
-        , profileRequestData
         , profileRequestResponse
         )
 
 import Json.Decode as Jdec
 import Json.Decode.Pipeline as Jpipe
 import Json.Encode as Jenc
-import Json.Encode.Extra as JencExtra
 
 
 type alias ProfileData =
@@ -131,19 +128,6 @@ type alias ProfileRequestData =
     }
 
 
-profileRequestData : Jdec.Decoder ProfileRequestData
-profileRequestData =
-    Jpipe.decode ProfileRequestData
-        |> Jpipe.required "instagram_id" Jdec.string
-        |> Jpipe.required "username" Jdec.string
-        |> Jpipe.required "name" Jdec.string
-        |> Jpipe.required "profile_picture" Jdec.string
-        |> Jpipe.required "bio" Jdec.string
-        |> Jpipe.required "website" Jdec.string
-        |> Jpipe.required "token" Jdec.string
-        |> Jpipe.required "is_business" Jdec.bool
-
-
 encodeProfileRequestData : ProfileRequestData -> Jenc.Value
 encodeProfileRequestData x =
     Jenc.object
@@ -187,18 +171,3 @@ profileRequestResponse =
         |> Jpipe.required "is_business" (Jdec.maybe Jdec.bool)
         |> Jpipe.required "inserted_at" Jdec.string
         |> Jpipe.required "updated_at" Jdec.string
-
-
-encodeProfileRequestResponse : ProfileRequestResponse -> Jenc.Value
-encodeProfileRequestResponse x =
-    Jenc.object
-        [ ( "id", Jenc.int x.id )
-        , ( "instagram_id", Jenc.string x.instagramId )
-        , ( "username", Jenc.string x.username )
-        , ( "name", Jenc.string x.fullName )
-        , ( "profile_picture", JencExtra.maybe Jenc.string x.profilePicture )
-        , ( "bio", JencExtra.maybe Jenc.string x.bio )
-        , ( "website", JencExtra.maybe Jenc.string x.website )
-        , ( "token", JencExtra.maybe Jenc.string x.token )
-        , ( "is_business", JencExtra.maybe Jenc.bool x.isBusiness )
-        ]

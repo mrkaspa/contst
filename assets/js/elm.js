@@ -8121,30 +8121,6 @@ var _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required = F3(
 			decoder);
 	});
 
-var _elm_community$json_extra$Json_Encode_Extra$dict = F3(
-	function (toKey, toValue, dict) {
-		return _elm_lang$core$Json_Encode$object(
-			A2(
-				_elm_lang$core$List$map,
-				function (_p0) {
-					var _p1 = _p0;
-					return {
-						ctor: '_Tuple2',
-						_0: toKey(_p1._0),
-						_1: toValue(_p1._1)
-					};
-				},
-				_elm_lang$core$Dict$toList(dict)));
-	});
-var _elm_community$json_extra$Json_Encode_Extra$maybe = function (encoder) {
-	return function (_p2) {
-		return A2(
-			_elm_lang$core$Maybe$withDefault,
-			_elm_lang$core$Json_Encode$null,
-			A2(_elm_lang$core$Maybe$map, encoder, _p2));
-	};
-};
-
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
 var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
@@ -11567,82 +11543,6 @@ var _truqu$elm_base64$Base64$encode = function (s) {
 					_truqu$elm_base64$Base64$toCodeList(s)))));
 };
 
-var _user$project$Auth_Profile$encodeProfileRequestResponse = function (x) {
-	return _elm_lang$core$Json_Encode$object(
-		{
-			ctor: '::',
-			_0: {
-				ctor: '_Tuple2',
-				_0: 'id',
-				_1: _elm_lang$core$Json_Encode$int(x.id)
-			},
-			_1: {
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'instagram_id',
-					_1: _elm_lang$core$Json_Encode$string(x.instagramId)
-				},
-				_1: {
-					ctor: '::',
-					_0: {
-						ctor: '_Tuple2',
-						_0: 'username',
-						_1: _elm_lang$core$Json_Encode$string(x.username)
-					},
-					_1: {
-						ctor: '::',
-						_0: {
-							ctor: '_Tuple2',
-							_0: 'name',
-							_1: _elm_lang$core$Json_Encode$string(x.fullName)
-						},
-						_1: {
-							ctor: '::',
-							_0: {
-								ctor: '_Tuple2',
-								_0: 'profile_picture',
-								_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.profilePicture)
-							},
-							_1: {
-								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
-									_0: 'bio',
-									_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.bio)
-								},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
-										_0: 'website',
-										_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.website)
-									},
-									_1: {
-										ctor: '::',
-										_0: {
-											ctor: '_Tuple2',
-											_0: 'token',
-											_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.token)
-										},
-										_1: {
-											ctor: '::',
-											_0: {
-												ctor: '_Tuple2',
-												_0: 'is_business',
-												_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$bool, x.isBusiness)
-											},
-											_1: {ctor: '[]'}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		});
-};
 var _user$project$Auth_Profile$encodeProfileRequestData = function (x) {
 	return _elm_lang$core$Json_Encode$object(
 		{
@@ -11885,39 +11785,6 @@ var _user$project$Auth_Profile$ProfileRequestData = F8(
 	function (a, b, c, d, e, f, g, h) {
 		return {instagramId: a, username: b, fullName: c, profilePicture: d, bio: e, website: f, token: g, isBusiness: h};
 	});
-var _user$project$Auth_Profile$profileRequestData = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'is_business',
-	_elm_lang$core$Json_Decode$bool,
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'token',
-		_elm_lang$core$Json_Decode$string,
-		A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'website',
-			_elm_lang$core$Json_Decode$string,
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'bio',
-				_elm_lang$core$Json_Decode$string,
-				A3(
-					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'profile_picture',
-					_elm_lang$core$Json_Decode$string,
-					A3(
-						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-						'name',
-						_elm_lang$core$Json_Decode$string,
-						A3(
-							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-							'username',
-							_elm_lang$core$Json_Decode$string,
-							A3(
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-								'instagram_id',
-								_elm_lang$core$Json_Decode$string,
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequestData)))))))));
 var _user$project$Auth_Profile$ProfileRequestResponse = function (a) {
 	return function (b) {
 		return function (c) {
