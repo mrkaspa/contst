@@ -25,8 +25,8 @@ request.
 -}
 
 import Navigation as Navigation
-import OAuth exposing (..)
 import OAuth.Internal
+import OAuth.OAuth exposing (..)
 import QueryString as QS
 
 

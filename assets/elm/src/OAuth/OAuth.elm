@@ -1,4 +1,4 @@
-module OAuth
+module OAuth.OAuth
     exposing
         ( Authentication(..)
         , Authorization

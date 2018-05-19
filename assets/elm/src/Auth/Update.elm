@@ -4,8 +4,8 @@ import Auth.Profile exposing (ProfileData, encodeProfileData, encodeProfileReque
 import Http
 import Model exposing (AuthMsg(..), Model, Msg(..), authorizationEndpoint)
 import Navigation
-import OAuth
 import OAuth.Implicit
+import OAuth.OAuth as OAuth
 import Ports.LocalStorage exposing (storageClear, storageSetItem)
 
 

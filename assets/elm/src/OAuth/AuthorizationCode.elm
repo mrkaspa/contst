@@ -34,7 +34,7 @@ request.
 
 -}
 
-import OAuth exposing (..)
+import OAuth.OAuth exposing (..)
 import OAuth.Decode exposing (..)
 import Navigation as Navigation
 import OAuth.Internal as OAuth.Internal

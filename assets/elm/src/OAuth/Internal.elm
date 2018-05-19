@@ -3,8 +3,8 @@ module OAuth.Internal exposing (..)
 import Base64
 import Http as Http
 import Navigation as Navigation
-import OAuth exposing (..)
 import OAuth.Decode exposing (..)
+import OAuth.OAuth exposing (..)
 import QueryString as QS
 
 

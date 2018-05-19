@@ -23,9 +23,9 @@ requests made to the Authorization Server and cope with implementation quirks.
 
 -}
 
-import OAuth exposing (..)
-import Json.Decode as Json
 import Http as Http
+import Json.Decode as Json
+import OAuth.OAuth exposing (..)
 import Time exposing (Time)
 
 
@@ -50,7 +50,7 @@ For instance,
 
     adjustRequest : AdjustRequest ResponseToken
     adjustRequest req =
-        { req | headers = [ Http.header "Accept" ("application/json") ] :: req.headers }
+        { req | headers = [ Http.header "Accept" "application/json" ] :: req.headers }
 
 -}
 type alias AdjustRequest a =
@@ -134,7 +134,7 @@ accessTokenDecoder =
         failUnless =
             Maybe.map Json.succeed >> Maybe.withDefault (Json.fail "can't decode token")
     in
-        Json.andThen failUnless mtoken
+    Json.andThen failUnless mtoken
 
 
 {-| Json decoder for a refresh token

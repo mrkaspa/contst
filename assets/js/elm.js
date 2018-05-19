@@ -11747,7 +11747,7 @@ var _user$project$Auth_Profile$profileRequest = A3(
 		_elm_lang$core$Json_Decode$string,
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequest)));
 
-var _user$project$OAuth$showErrCode = function (err) {
+var _user$project$OAuth_OAuth$showErrCode = function (err) {
 	var _p0 = err;
 	switch (_p0.ctor) {
 		case 'InvalidRequest':
@@ -11768,11 +11768,11 @@ var _user$project$OAuth$showErrCode = function (err) {
 			return 'unknown';
 	}
 };
-var _user$project$OAuth$showToken = function (_p1) {
+var _user$project$OAuth_OAuth$showToken = function (_p1) {
 	var _p2 = _p1;
 	return A2(_elm_lang$core$Basics_ops['++'], 'Bearer ', _p2._0);
 };
-var _user$project$OAuth$showResponseType = function (r) {
+var _user$project$OAuth_OAuth$showResponseType = function (r) {
 	var _p3 = r;
 	if (_p3.ctor === 'Code') {
 		return 'code';
@@ -11780,7 +11780,7 @@ var _user$project$OAuth$showResponseType = function (r) {
 		return 'token';
 	}
 };
-var _user$project$OAuth$use = function (token) {
+var _user$project$OAuth_OAuth$use = function (token) {
 	return F2(
 		function (x, y) {
 			return {ctor: '::', _0: x, _1: y};
@@ -11788,82 +11788,82 @@ var _user$project$OAuth$use = function (token) {
 		A2(
 			_elm_lang$http$Http$header,
 			'Authorization',
-			_user$project$OAuth$showToken(token)));
+			_user$project$OAuth_OAuth$showToken(token)));
 };
-var _user$project$OAuth$Authorization = F6(
+var _user$project$OAuth_OAuth$Authorization = F6(
 	function (a, b, c, d, e, f) {
 		return {clientId: a, url: b, redirectUri: c, responseType: d, scope: e, state: f};
 	});
-var _user$project$OAuth$Credentials = F2(
+var _user$project$OAuth_OAuth$Credentials = F2(
 	function (a, b) {
 		return {clientId: a, secret: b};
 	});
-var _user$project$OAuth$ResponseToken = F5(
+var _user$project$OAuth_OAuth$ResponseToken = F5(
 	function (a, b, c, d, e) {
 		return {expiresIn: a, refreshToken: b, scope: c, state: d, token: e};
 	});
-var _user$project$OAuth$ResponseCode = F2(
+var _user$project$OAuth_OAuth$ResponseCode = F2(
 	function (a, b) {
 		return {code: a, state: b};
 	});
-var _user$project$OAuth$Err = F4(
+var _user$project$OAuth_OAuth$Err = F4(
 	function (a, b, c, d) {
 		return {error: a, errorDescription: b, errorUri: c, state: d};
 	});
-var _user$project$OAuth$Refresh = function (a) {
+var _user$project$OAuth_OAuth$Refresh = function (a) {
 	return {ctor: 'Refresh', _0: a};
 };
-var _user$project$OAuth$Password = function (a) {
+var _user$project$OAuth_OAuth$Password = function (a) {
 	return {ctor: 'Password', _0: a};
 };
-var _user$project$OAuth$ClientCredentials = function (a) {
+var _user$project$OAuth_OAuth$ClientCredentials = function (a) {
 	return {ctor: 'ClientCredentials', _0: a};
 };
-var _user$project$OAuth$AuthorizationCode = function (a) {
+var _user$project$OAuth_OAuth$AuthorizationCode = function (a) {
 	return {ctor: 'AuthorizationCode', _0: a};
 };
-var _user$project$OAuth$Token = {ctor: 'Token'};
-var _user$project$OAuth$Code = {ctor: 'Code'};
-var _user$project$OAuth$Invalid = function (a) {
+var _user$project$OAuth_OAuth$Token = {ctor: 'Token'};
+var _user$project$OAuth_OAuth$Code = {ctor: 'Code'};
+var _user$project$OAuth_OAuth$Invalid = function (a) {
 	return {ctor: 'Invalid', _0: a};
 };
-var _user$project$OAuth$Missing = function (a) {
+var _user$project$OAuth_OAuth$Missing = function (a) {
 	return {ctor: 'Missing', _0: a};
 };
-var _user$project$OAuth$OAuthErr = function (a) {
+var _user$project$OAuth_OAuth$OAuthErr = function (a) {
 	return {ctor: 'OAuthErr', _0: a};
 };
-var _user$project$OAuth$Empty = {ctor: 'Empty'};
-var _user$project$OAuth$Unknown = {ctor: 'Unknown'};
-var _user$project$OAuth$TemporarilyUnavailable = {ctor: 'TemporarilyUnavailable'};
-var _user$project$OAuth$ServerError = {ctor: 'ServerError'};
-var _user$project$OAuth$InvalidScope = {ctor: 'InvalidScope'};
-var _user$project$OAuth$UnsupportedResponseType = {ctor: 'UnsupportedResponseType'};
-var _user$project$OAuth$AccessDenied = {ctor: 'AccessDenied'};
-var _user$project$OAuth$UnauthorizedClient = {ctor: 'UnauthorizedClient'};
-var _user$project$OAuth$InvalidRequest = {ctor: 'InvalidRequest'};
-var _user$project$OAuth$errCodeFromString = function (str) {
+var _user$project$OAuth_OAuth$Empty = {ctor: 'Empty'};
+var _user$project$OAuth_OAuth$Unknown = {ctor: 'Unknown'};
+var _user$project$OAuth_OAuth$TemporarilyUnavailable = {ctor: 'TemporarilyUnavailable'};
+var _user$project$OAuth_OAuth$ServerError = {ctor: 'ServerError'};
+var _user$project$OAuth_OAuth$InvalidScope = {ctor: 'InvalidScope'};
+var _user$project$OAuth_OAuth$UnsupportedResponseType = {ctor: 'UnsupportedResponseType'};
+var _user$project$OAuth_OAuth$AccessDenied = {ctor: 'AccessDenied'};
+var _user$project$OAuth_OAuth$UnauthorizedClient = {ctor: 'UnauthorizedClient'};
+var _user$project$OAuth_OAuth$InvalidRequest = {ctor: 'InvalidRequest'};
+var _user$project$OAuth_OAuth$errCodeFromString = function (str) {
 	var _p4 = str;
 	switch (_p4) {
 		case 'invalid_request':
-			return _user$project$OAuth$InvalidRequest;
+			return _user$project$OAuth_OAuth$InvalidRequest;
 		case 'unauthorized_client':
-			return _user$project$OAuth$UnauthorizedClient;
+			return _user$project$OAuth_OAuth$UnauthorizedClient;
 		case 'access_denied':
-			return _user$project$OAuth$AccessDenied;
+			return _user$project$OAuth_OAuth$AccessDenied;
 		case 'unsupported_response_type':
-			return _user$project$OAuth$UnsupportedResponseType;
+			return _user$project$OAuth_OAuth$UnsupportedResponseType;
 		case 'invalid_scope':
-			return _user$project$OAuth$InvalidScope;
+			return _user$project$OAuth_OAuth$InvalidScope;
 		case 'server_error':
-			return _user$project$OAuth$ServerError;
+			return _user$project$OAuth_OAuth$ServerError;
 		case 'temporarily_unavailable':
-			return _user$project$OAuth$TemporarilyUnavailable;
+			return _user$project$OAuth_OAuth$TemporarilyUnavailable;
 		default:
-			return _user$project$OAuth$Unknown;
+			return _user$project$OAuth_OAuth$Unknown;
 	}
 };
-var _user$project$OAuth$errDecoder = A5(
+var _user$project$OAuth_OAuth$errDecoder = A5(
 	_elm_lang$core$Json_Decode$map4,
 	F4(
 		function (error, errorUri, errorDescription, state) {
@@ -11871,7 +11871,7 @@ var _user$project$OAuth$errDecoder = A5(
 		}),
 	A2(
 		_elm_lang$core$Json_Decode$map,
-		_user$project$OAuth$errCodeFromString,
+		_user$project$OAuth_OAuth$errCodeFromString,
 		A2(_elm_lang$core$Json_Decode$field, 'error', _elm_lang$core$Json_Decode$string)),
 	_elm_lang$core$Json_Decode$maybe(
 		A2(_elm_lang$core$Json_Decode$field, 'error_uri', _elm_lang$core$Json_Decode$string)),
@@ -11879,7 +11879,7 @@ var _user$project$OAuth$errDecoder = A5(
 		A2(_elm_lang$core$Json_Decode$field, 'error_description', _elm_lang$core$Json_Decode$string)),
 	_elm_lang$core$Json_Decode$maybe(
 		A2(_elm_lang$core$Json_Decode$field, 'state', _elm_lang$core$Json_Decode$string)));
-var _user$project$OAuth$Bearer = function (a) {
+var _user$project$OAuth_OAuth$Bearer = function (a) {
 	return {ctor: 'Bearer', _0: a};
 };
 
@@ -11917,7 +11917,7 @@ var _user$project$OAuth_Decode$makeToken = F2(
 		};
 		if (((_p0.ctor === '_Tuple2') && (_p0._0.ctor === 'Just')) && (_p0._1 === 'bearer')) {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$OAuth$Bearer(_p0._0._0));
+				_user$project$OAuth_OAuth$Bearer(_p0._0._0));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
@@ -12025,15 +12025,15 @@ var _user$project$OAuth_Internal$parseToken = F5(
 				refreshToken: _elm_lang$core$Maybe$Nothing,
 				scope: scope,
 				state: state,
-				token: _user$project$OAuth$Bearer(accessToken)
+				token: _user$project$OAuth_OAuth$Bearer(accessToken)
 			});
 	});
 var _user$project$OAuth_Internal$parseError = F4(
 	function (error, errorDescription, errorUri, state) {
 		return _elm_lang$core$Result$Err(
-			_user$project$OAuth$OAuthErr(
+			_user$project$OAuth_OAuth$OAuthErr(
 				{
-					error: _user$project$OAuth$errCodeFromString(error),
+					error: _user$project$OAuth_OAuth$errCodeFromString(error),
 					errorDescription: errorDescription,
 					errorUri: errorUri,
 					state: state
@@ -12197,7 +12197,7 @@ var _user$project$OAuth_Internal$authorize = function (_p8) {
 				A3(
 					_Bogdanp$elm_querystring$QueryString$add,
 					'response_type',
-					_user$project$OAuth$showResponseType(_p9.responseType),
+					_user$project$OAuth_OAuth$showResponseType(_p9.responseType),
 					A3(
 						_Bogdanp$elm_querystring$QueryString$add,
 						'redirect_uri',
@@ -12254,7 +12254,7 @@ var _user$project$OAuth_Implicit$parse = function (_p0) {
 			break _v1_2;
 		}
 	} while(false);
-	return _elm_lang$core$Result$Err(_user$project$OAuth$Empty);
+	return _elm_lang$core$Result$Err(_user$project$OAuth_OAuth$Empty);
 };
 var _user$project$OAuth_Implicit$authorize = _user$project$OAuth_Internal$authorize;
 
@@ -12411,7 +12411,7 @@ var _user$project$Auth_Update$update = F2(
 							{
 								clientId: _p7.oauth.clientId,
 								redirectUri: _p7.oauth.redirectUri,
-								responseType: _user$project$OAuth$Token,
+								responseType: _user$project$OAuth_OAuth$Token,
 								scope: {
 									ctor: '::',
 									_0: 'basic',
@@ -12497,7 +12497,7 @@ var _user$project$Init$init = function (location) {
 						model,
 						{
 							error: _elm_lang$core$Maybe$Just(
-								_user$project$OAuth$showErrCode(_p0._0._0.error))
+								_user$project$OAuth_OAuth$showErrCode(_p0._0._0.error))
 						}),
 					{
 						ctor: '::',

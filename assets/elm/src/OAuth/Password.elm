@@ -25,7 +25,7 @@ request.
 
 -}
 
-import OAuth exposing (..)
+import OAuth.OAuth exposing (..)
 import OAuth.Decode exposing (..)
 import OAuth.Internal as OAuth.Internal
 import Http as Http

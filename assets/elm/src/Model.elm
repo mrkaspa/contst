@@ -2,7 +2,7 @@ module Model exposing (..)
 
 import Auth.Profile exposing (ProfileData, ProfileRequest)
 import Http
-import OAuth
+import OAuth.OAuth as OAuth
 
 
 ---------------------------------------
