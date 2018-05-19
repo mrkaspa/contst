@@ -1,6 +1,6 @@
 module Model exposing (..)
 
-import Auth.Profile exposing (ProfileData, ProfileRequestData)
+import Auth.Profile exposing (ProfileData, ProfileRequestResponse)
 import Http
 import OAuth.OAuth as OAuth
 
@@ -53,5 +53,5 @@ type AuthMsg
     = Authorize
     | GetProfile (Result Http.Error ProfileData)
     | ProfileLoaded ProfileData
-    | ProfileRequest (Result Http.Error ProfileRequestData)
+    | ProfileRequest (Result Http.Error ProfileRequestResponse)
     | Logout

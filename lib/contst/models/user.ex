@@ -15,20 +15,27 @@ defmodule Contst.Models.User do
     timestamps()
   end
 
-  @attrs [
+  @register_attrs [
     :instagram_id,
     :username,
-    :token,
     :name,
+    :token,
     :profile_picture,
     :bio,
     :website,
     :is_business
   ]
 
+  @register_required_attrs [
+    :instagram_id,
+    :username,
+    :name,
+    :token
+  ]
+
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @attrs)
-    |> validate_required(@attrs)
+    |> cast(params, @register_attrs)
+    |> validate_required(@register_required_attrs)
   end
 end

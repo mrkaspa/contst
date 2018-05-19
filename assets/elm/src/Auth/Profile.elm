@@ -4,10 +4,13 @@ module Auth.Profile
         , Profile
         , ProfileData
         , ProfileRequestData
+        , ProfileRequestResponse
         , encodeProfileData
         , encodeProfileRequestData
+        , encodeProfileRequestResponse
         , profileData
         , profileRequestData
+        , profileRequestResponse
         )
 
 import Json.Decode as Jdec
@@ -117,8 +120,7 @@ encodeCounts x =
 
 
 type alias ProfileRequestData =
-    { id : Maybe Int
-    , instagramId : String
+    { instagramId : String
     , username : String
     , fullName : String
     , profilePicture : String
@@ -126,15 +128,12 @@ type alias ProfileRequestData =
     , website : String
     , token : String
     , isBusiness : Bool
-    , insertedAt : Maybe String
-    , updatedAt : Maybe String
     }
 
 
 profileRequestData : Jdec.Decoder ProfileRequestData
 profileRequestData =
     Jpipe.decode ProfileRequestData
-        |> Jpipe.required "id" (Jdec.maybe Jdec.int)
         |> Jpipe.required "instagram_id" Jdec.string
         |> Jpipe.required "username" Jdec.string
         |> Jpipe.required "name" Jdec.string
@@ -143,15 +142,12 @@ profileRequestData =
         |> Jpipe.required "website" Jdec.string
         |> Jpipe.required "token" Jdec.string
         |> Jpipe.required "is_business" Jdec.bool
-        |> Jpipe.required "inserted_at" (Jdec.maybe Jdec.string)
-        |> Jpipe.required "updated_at" (Jdec.maybe Jdec.string)
 
 
 encodeProfileRequestData : ProfileRequestData -> Jenc.Value
 encodeProfileRequestData x =
     Jenc.object
-        [ ( "id", JencExtra.maybe Jenc.int x.id )
-        , ( "instagram_id", Jenc.string x.instagramId )
+        [ ( "instagram_id", Jenc.string x.instagramId )
         , ( "username", Jenc.string x.username )
         , ( "name", Jenc.string x.fullName )
         , ( "profile_picture", Jenc.string x.profilePicture )
@@ -159,4 +155,50 @@ encodeProfileRequestData x =
         , ( "website", Jenc.string x.website )
         , ( "token", Jenc.string x.token )
         , ( "is_business", Jenc.bool x.isBusiness )
+        ]
+
+
+type alias ProfileRequestResponse =
+    { id : Int
+    , instagramId : String
+    , username : String
+    , fullName : String
+    , profilePicture : Maybe String
+    , bio : Maybe String
+    , website : Maybe String
+    , token : Maybe String
+    , isBusiness : Maybe Bool
+    , insertedAt : String
+    , updatedAt : String
+    }
+
+
+profileRequestResponse : Jdec.Decoder ProfileRequestResponse
+profileRequestResponse =
+    Jpipe.decode ProfileRequestResponse
+        |> Jpipe.required "id" Jdec.int
+        |> Jpipe.required "instagram_id" Jdec.string
+        |> Jpipe.required "username" Jdec.string
+        |> Jpipe.required "name" Jdec.string
+        |> Jpipe.required "profile_picture" (Jdec.maybe Jdec.string)
+        |> Jpipe.required "bio" (Jdec.maybe Jdec.string)
+        |> Jpipe.required "website" (Jdec.maybe Jdec.string)
+        |> Jpipe.required "token" (Jdec.maybe Jdec.string)
+        |> Jpipe.required "is_business" (Jdec.maybe Jdec.bool)
+        |> Jpipe.required "inserted_at" Jdec.string
+        |> Jpipe.required "updated_at" Jdec.string
+
+
+encodeProfileRequestResponse : ProfileRequestResponse -> Jenc.Value
+encodeProfileRequestResponse x =
+    Jenc.object
+        [ ( "id", Jenc.int x.id )
+        , ( "instagram_id", Jenc.string x.instagramId )
+        , ( "username", Jenc.string x.username )
+        , ( "name", Jenc.string x.fullName )
+        , ( "profile_picture", JencExtra.maybe Jenc.string x.profilePicture )
+        , ( "bio", JencExtra.maybe Jenc.string x.bio )
+        , ( "website", JencExtra.maybe Jenc.string x.website )
+        , ( "token", JencExtra.maybe Jenc.string x.token )
+        , ( "is_business", JencExtra.maybe Jenc.bool x.isBusiness )
         ]

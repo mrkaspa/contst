@@ -5,12 +5,12 @@ defmodule Contst.Repo.Migrations.CreateUsers do
     create table(:users) do
       add(:instagram_id, :string, null: false)
       add(:username, :string, null: false)
-      add(:token, :text, null: false)
       add(:name, :string, null: false)
-      add(:profile_picture, :string, null: false)
-      add(:bio, :string, null: false)
-      add(:website, :string, null: false)
-      add(:is_business, :boolean, null: false)
+      add(:token, :text)
+      add(:profile_picture, :string)
+      add(:bio, :string)
+      add(:website, :string)
+      add(:is_business, :boolean)
 
       timestamps()
     end

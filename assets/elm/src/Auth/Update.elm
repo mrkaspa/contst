@@ -1,6 +1,6 @@
 module Auth.Update exposing (update)
 
-import Auth.Profile exposing (ProfileData, encodeProfileData, encodeProfileRequestData, profileData, profileRequestData)
+import Auth.Profile exposing (ProfileData, encodeProfileData, encodeProfileRequestData, profileData, profileRequestResponse)
 import Http
 import Model exposing (AuthMsg(..), Model, Msg(..), authorizationEndpoint)
 import Navigation
@@ -68,8 +68,7 @@ createOrUpdateProfile profileData token =
                     profileData.profile
 
                 body =
-                    { id = Nothing
-                    , instagramId = profile.id
+                    { instagramId = profile.id
                     , username = profile.username
                     , fullName = profile.fullName
                     , profilePicture = profile.profilePicture
@@ -77,8 +76,6 @@ createOrUpdateProfile profileData token =
                     , website = profile.website
                     , token = token
                     , isBusiness = profile.isBusiness
-                    , insertedAt = Nothing
-                    , updatedAt = Nothing
                     }
                         |> encodeProfileRequestData
                         |> Http.jsonBody
@@ -87,7 +84,7 @@ createOrUpdateProfile profileData token =
                 Http.post
                     "/api/users"
                     body
-                    profileRequestData
+                    profileRequestResponse
 
         Nothing ->
             Cmd.none
