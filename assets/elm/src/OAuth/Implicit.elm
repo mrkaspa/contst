@@ -24,9 +24,9 @@ request.
 
 -}
 
-import OAuth exposing (..)
 import Navigation as Navigation
-import Internal as Internal
+import OAuth exposing (..)
+import OAuth.Internal
 import QueryString as QS
 
 
@@ -38,7 +38,7 @@ In this case, use `Token` as a `responseType`
 -}
 authorize : Authorization -> Cmd msg
 authorize =
-    Internal.authorize
+    OAuth.Internal.authorize
 
 
 {-| Parse the location looking for a parameters set by the resource provider server after
@@ -59,21 +59,21 @@ parse { hash } =
         geti =
             flip (QS.one QS.int) qs
     in
-        case ( gets "access_token", gets "error" ) of
-            ( Just accessToken, _ ) ->
-                Internal.parseToken
-                    accessToken
-                    (gets "token_type")
-                    (geti "expires_in")
-                    (QS.all "scope" qs)
-                    (gets "state")
+    case ( gets "access_token", gets "error" ) of
+        ( Just accessToken, _ ) ->
+            OAuth.Internal.parseToken
+                accessToken
+                (gets "token_type")
+                (geti "expires_in")
+                (QS.all "scope" qs)
+                (gets "state")
 
-            ( _, Just error ) ->
-                Internal.parseError
-                    error
-                    (gets "error_description")
-                    (gets "error_uri")
-                    (gets "state")
+        ( _, Just error ) ->
+            OAuth.Internal.parseError
+                error
+                (gets "error_description")
+                (gets "error_uri")
+                (gets "state")
 
-            _ ->
-                Result.Err Empty
+        _ ->
+            Result.Err Empty

@@ -37,7 +37,7 @@ request.
 import OAuth exposing (..)
 import OAuth.Decode exposing (..)
 import Navigation as Navigation
-import Internal as Internal
+import OAuth.Internal as OAuth.Internal
 import QueryString as QS
 import Http as Http
 
@@ -50,7 +50,7 @@ In this case, use `Code` as a `responseType`
 -}
 authorize : Authorization -> Cmd msg
 authorize =
-    Internal.authorize
+    OAuth.Internal.authorize
 
 
 {-| Authenticate the client using the authorization code obtained from the authorization.
@@ -60,7 +60,7 @@ In this case, use the `AuthorizationCode` constructor.
 -}
 authenticate : Authentication -> Http.Request ResponseToken
 authenticate =
-    Internal.authenticate identity
+    OAuth.Internal.authenticate identity
 
 
 {-| Authenticate the client using the authorization code obtained from the authorization, passing
@@ -71,7 +71,7 @@ In this case, use the `AuthorizationCode` constructor.
 -}
 authenticateWithOpts : AdjustRequest ResponseToken -> Authentication -> Http.Request ResponseToken
 authenticateWithOpts fn =
-    Internal.authenticate fn
+    OAuth.Internal.authenticate fn
 
 
 {-| Parse the location looking for a parameters set by the resource provider server after
@@ -91,12 +91,12 @@ parse { search } =
     in
         case ( gets "code", gets "error" ) of
             ( Just code, _ ) ->
-                Internal.parseAuthorizationCode
+                OAuth.Internal.parseAuthorizationCode
                     code
                     (gets "state")
 
             ( _, Just error ) ->
-                Internal.parseError
+                OAuth.Internal.parseError
                     error
                     (gets "error_description")
                     (gets "error_uri")

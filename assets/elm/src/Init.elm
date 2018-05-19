@@ -1,7 +1,7 @@
 module Init exposing (init)
 
+import Auth.Profile exposing (profileData)
 import Http
-import Json.Profile exposing (profileData)
 import Model exposing (AuthMsg(..), Model, Msg(..), profileEndpoint)
 import Navigation
 import OAuth

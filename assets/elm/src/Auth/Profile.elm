@@ -1,11 +1,13 @@
-module Json.Profile
+module Auth.Profile
     exposing
         ( Counts
         , Profile
         , ProfileData
+        , ProfileRequest
         , encodeProfileData
+        , encodeProfileRequest
         , profileData
-        , profileDataToString
+        , profileRequest
         )
 
 import Json.Decode as Jdec
@@ -37,13 +39,14 @@ type alias Counts =
     }
 
 
+type alias ProfileRequest =
+    { username : String
+    , token : String
+    }
+
+
 
 -- decoders and encoders
-
-
-profileDataToString : ProfileData -> String
-profileDataToString r =
-    Jenc.encode 0 (encodeProfileData r)
 
 
 profileData : Jdec.Decoder ProfileData
@@ -72,6 +75,13 @@ profile =
         |> Jpipe.required "counts" counts
 
 
+profileRequest : Jdec.Decoder ProfileRequest
+profileRequest =
+    Jpipe.decode ProfileRequest
+        |> Jpipe.required "id" Jdec.string
+        |> Jpipe.required "username" Jdec.string
+
+
 encodeProfile : Profile -> Jenc.Value
 encodeProfile x =
     Jenc.object
@@ -83,6 +93,15 @@ encodeProfile x =
         , ( "website", Jenc.string x.website )
         , ( "is_business", Jenc.bool x.isBusiness )
         , ( "counts", encodeCounts x.counts )
+
+        -- , ( "token"
+        --   , Jenc.string <|
+        --         case x.token of
+        --             Just (OAuth.Bearer token) ->
+        --                 token
+        --             Nothing ->
+        --                 ""
+        --   )
         ]
 
 
@@ -94,10 +113,24 @@ counts =
         |> Jpipe.required "followed_by" Jdec.int
 
 
+
+-- tokenDec : Jdec.Decoder (Maybe OAuth.Token)
+-- tokenDec =
+--     Jdec.map (\s -> Just (OAuth.Bearer s)) Jdec.string
+
+
 encodeCounts : Counts -> Jenc.Value
 encodeCounts x =
     Jenc.object
         [ ( "media", Jenc.int x.media )
         , ( "follows", Jenc.int x.follows )
         , ( "followed_by", Jenc.int x.followedBy )
+        ]
+
+
+encodeProfileRequest : ProfileRequest -> Jenc.Value
+encodeProfileRequest x =
+    Jenc.object
+        [ ( "username", Jenc.string x.username )
+        , ( "token", Jenc.string x.token )
         ]

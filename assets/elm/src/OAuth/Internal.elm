@@ -1,4 +1,4 @@
-module Internal exposing (..)
+module OAuth.Internal exposing (..)
 
 import Base64
 import Http as Http

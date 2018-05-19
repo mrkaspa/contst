@@ -1,46 +1,17 @@
 module Update exposing (update)
 
-import Json.Profile exposing (encodeProfileData)
-import Model exposing (AuthMsg(..), Model, Msg(..), authorizationEndpoint)
-import Navigation
-import OAuth
-import OAuth.Implicit
-import Ports.LocalStorage exposing (storageClear, storageSetItem)
+import Auth.Update
+import Model exposing (Model, Msg(..))
 
 
 -- Update is pretty straightforward.
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg ({ oauth } as model) =
+update msg model =
     case msg of
         Nop ->
             model ! []
 
         Auth authMsg ->
-            case authMsg of
-                GetProfile res ->
-                    case res of
-                        Err err ->
-                            { model | error = Just "unable to fetch user profile ¯\\_(ツ)_/¯" } ! []
-
-                        Ok profile ->
-                            { model | profile = Just profile } ! [ storageSetItem ( "profile", encodeProfileData profile ) ]
-
-                NewProfile profile ->
-                    { model | profile = Just profile } ! []
-
-                Logout ->
-                    { model | profile = Nothing, token = Nothing } ! [ storageClear (), Navigation.modifyUrl "" ]
-
-                Authorize ->
-                    model
-                        ! [ OAuth.Implicit.authorize
-                                { clientId = model.oauth.clientId
-                                , redirectUri = model.oauth.redirectUri
-                                , responseType = OAuth.Token
-                                , scope = [ "basic", "public_content" ]
-                                , state = Nothing
-                                , url = authorizationEndpoint
-                                }
-                          ]
+            Auth.Update.update authMsg model

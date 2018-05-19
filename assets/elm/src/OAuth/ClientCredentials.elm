@@ -26,7 +26,7 @@ request.
 
 import OAuth exposing (..)
 import OAuth.Decode exposing (..)
-import Internal as Internal
+import OAuth.Internal as OAuth.Internal
 import Http as Http
 
 
@@ -37,7 +37,7 @@ In this case, use the `ClientCredentials` constructor.
 -}
 authenticate : Authentication -> Http.Request ResponseToken
 authenticate =
-    Internal.authenticate identity
+    OAuth.Internal.authenticate identity
 
 
 {-| Authenticate the client using the authorization code obtained from the authorization, passing
@@ -48,4 +48,4 @@ In this case, use the `ClientCredentials` constructor.
 -}
 authenticateWithOpts : AdjustRequest ResponseToken -> Authentication -> Http.Request ResponseToken
 authenticateWithOpts fn =
-    Internal.authenticate fn
+    OAuth.Internal.authenticate fn

@@ -11543,7 +11543,27 @@ var _truqu$elm_base64$Base64$encode = function (s) {
 					_truqu$elm_base64$Base64$toCodeList(s)))));
 };
 
-var _user$project$Json_Profile$encodeCounts = function (x) {
+var _user$project$Auth_Profile$encodeProfileRequest = function (x) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'username',
+				_1: _elm_lang$core$Json_Encode$string(x.username)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'token',
+					_1: _elm_lang$core$Json_Encode$string(x.token)
+				},
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Auth_Profile$encodeCounts = function (x) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
@@ -11571,7 +11591,7 @@ var _user$project$Json_Profile$encodeCounts = function (x) {
 			}
 		});
 };
-var _user$project$Json_Profile$encodeProfile = function (x) {
+var _user$project$Auth_Profile$encodeProfile = function (x) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
@@ -11627,7 +11647,7 @@ var _user$project$Json_Profile$encodeProfile = function (x) {
 										_0: {
 											ctor: '_Tuple2',
 											_0: 'counts',
-											_1: _user$project$Json_Profile$encodeCounts(x.counts)
+											_1: _user$project$Auth_Profile$encodeCounts(x.counts)
 										},
 										_1: {ctor: '[]'}
 									}
@@ -11639,36 +11659,30 @@ var _user$project$Json_Profile$encodeProfile = function (x) {
 			}
 		});
 };
-var _user$project$Json_Profile$encodeProfileData = function (x) {
+var _user$project$Auth_Profile$encodeProfileData = function (x) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
 			_0: {
 				ctor: '_Tuple2',
 				_0: 'data',
-				_1: _user$project$Json_Profile$encodeProfile(x.profile)
+				_1: _user$project$Auth_Profile$encodeProfile(x.profile)
 			},
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Json_Profile$profileDataToString = function (r) {
-	return A2(
-		_elm_lang$core$Json_Encode$encode,
-		0,
-		_user$project$Json_Profile$encodeProfileData(r));
-};
-var _user$project$Json_Profile$ProfileData = function (a) {
+var _user$project$Auth_Profile$ProfileData = function (a) {
 	return {profile: a};
 };
-var _user$project$Json_Profile$Profile = F8(
+var _user$project$Auth_Profile$Profile = F8(
 	function (a, b, c, d, e, f, g, h) {
 		return {id: a, username: b, fullName: c, profilePicture: d, bio: e, website: f, isBusiness: g, counts: h};
 	});
-var _user$project$Json_Profile$Counts = F3(
+var _user$project$Auth_Profile$Counts = F3(
 	function (a, b, c) {
 		return {media: a, follows: b, followedBy: c};
 	});
-var _user$project$Json_Profile$counts = A3(
+var _user$project$Auth_Profile$counts = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'followed_by',
 	_elm_lang$core$Json_Decode$int,
@@ -11680,11 +11694,11 @@ var _user$project$Json_Profile$counts = A3(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 			'media',
 			_elm_lang$core$Json_Decode$int,
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Json_Profile$Counts))));
-var _user$project$Json_Profile$profile = A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$Counts))));
+var _user$project$Auth_Profile$profile = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'counts',
-	_user$project$Json_Profile$counts,
+	_user$project$Auth_Profile$counts,
 	A3(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 		'is_business',
@@ -11713,12 +11727,25 @@ var _user$project$Json_Profile$profile = A3(
 								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 								'id',
 								_elm_lang$core$Json_Decode$string,
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Json_Profile$Profile)))))))));
-var _user$project$Json_Profile$profileData = A3(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$Profile)))))))));
+var _user$project$Auth_Profile$profileData = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'data',
-	_user$project$Json_Profile$profile,
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Json_Profile$ProfileData));
+	_user$project$Auth_Profile$profile,
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileData));
+var _user$project$Auth_Profile$ProfileRequest = F2(
+	function (a, b) {
+		return {username: a, token: b};
+	});
+var _user$project$Auth_Profile$profileRequest = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'username',
+	_elm_lang$core$Json_Decode$string,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'id',
+		_elm_lang$core$Json_Decode$string,
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequest)));
 
 var _user$project$OAuth$showErrCode = function (err) {
 	var _p0 = err;
@@ -11863,15 +11890,18 @@ var _user$project$Model$profileEndpoint = function (token) {
 var _user$project$Model$authorizationEndpoint = 'https://api.instagram.com/oauth/authorize';
 var _user$project$Model$Model = F4(
 	function (a, b, c, d) {
-		return {oauth: a, error: b, token: c, profile: d};
+		return {oauth: a, error: b, profile: c, token: d};
 	});
 var _user$project$Model$Auth = function (a) {
 	return {ctor: 'Auth', _0: a};
 };
 var _user$project$Model$Nop = {ctor: 'Nop'};
 var _user$project$Model$Logout = {ctor: 'Logout'};
-var _user$project$Model$NewProfile = function (a) {
-	return {ctor: 'NewProfile', _0: a};
+var _user$project$Model$ProfileRequest = function (a) {
+	return {ctor: 'ProfileRequest', _0: a};
+};
+var _user$project$Model$ProfileLoaded = function (a) {
+	return {ctor: 'ProfileLoaded', _0: a};
 };
 var _user$project$Model$GetProfile = function (a) {
 	return {ctor: 'GetProfile', _0: a};
@@ -11960,7 +11990,7 @@ var _user$project$OAuth_Decode$RequestParts = F7(
 		return {method: a, headers: b, url: c, body: d, expect: e, timeout: f, withCredentials: g};
 	});
 
-var _user$project$Internal$qsAddMaybe = F3(
+var _user$project$OAuth_Internal$qsAddMaybe = F3(
 	function (param, ms, qs) {
 		var _p0 = ms;
 		if (_p0.ctor === 'Nothing') {
@@ -11969,7 +11999,7 @@ var _user$project$Internal$qsAddMaybe = F3(
 			return A3(_Bogdanp$elm_querystring$QueryString$add, param, _p0._0, qs);
 		}
 	});
-var _user$project$Internal$qsAddList = F3(
+var _user$project$OAuth_Internal$qsAddList = F3(
 	function (param, xs, qs) {
 		var _p1 = xs;
 		if (_p1.ctor === '[]') {
@@ -11982,12 +12012,12 @@ var _user$project$Internal$qsAddList = F3(
 				qs);
 		}
 	});
-var _user$project$Internal$parseAuthorizationCode = F2(
+var _user$project$OAuth_Internal$parseAuthorizationCode = F2(
 	function (code, state) {
 		return _elm_lang$core$Result$Ok(
 			{code: code, state: state});
 	});
-var _user$project$Internal$parseToken = F5(
+var _user$project$OAuth_Internal$parseToken = F5(
 	function (accessToken, mTokenType, mExpiresIn, scope, state) {
 		return _elm_lang$core$Result$Ok(
 			{
@@ -11998,7 +12028,7 @@ var _user$project$Internal$parseToken = F5(
 				token: _user$project$OAuth$Bearer(accessToken)
 			});
 	});
-var _user$project$Internal$parseError = F4(
+var _user$project$OAuth_Internal$parseError = F4(
 	function (error, errorDescription, errorUri, state) {
 		return _elm_lang$core$Result$Err(
 			_user$project$OAuth$OAuthErr(
@@ -12009,7 +12039,7 @@ var _user$project$Internal$parseError = F4(
 					state: state
 				}));
 	});
-var _user$project$Internal$authHeader = function (credentials) {
+var _user$project$OAuth_Internal$authHeader = function (credentials) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
 		{ctor: '[]'},
@@ -12040,7 +12070,7 @@ var _user$project$Internal$authHeader = function (credentials) {
 					},
 					credentials))));
 };
-var _user$project$Internal$makeRequest = F4(
+var _user$project$OAuth_Internal$makeRequest = F4(
 	function (adjust, url, headers, body) {
 		var requestParts = {
 			method: 'POST',
@@ -12054,24 +12084,24 @@ var _user$project$Internal$makeRequest = F4(
 		return _elm_lang$http$Http$request(
 			adjust(requestParts));
 	});
-var _user$project$Internal$authenticate = F2(
+var _user$project$OAuth_Internal$authenticate = F2(
 	function (adjust, authentication) {
 		var _p4 = authentication;
 		switch (_p4.ctor) {
 			case 'AuthorizationCode':
 				var _p5 = _p4._0.credentials;
-				var headers = _user$project$Internal$authHeader(
+				var headers = _user$project$OAuth_Internal$authHeader(
 					_elm_lang$core$String$isEmpty(_p5.secret) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(_p5));
 				var body = A2(
 					_elm_lang$core$String$dropLeft,
 					1,
 					_Bogdanp$elm_querystring$QueryString$render(
 						A3(
-							_user$project$Internal$qsAddMaybe,
+							_user$project$OAuth_Internal$qsAddMaybe,
 							'state',
 							_p4._0.state,
 							A3(
-								_user$project$Internal$qsAddList,
+								_user$project$OAuth_Internal$qsAddList,
 								'scope',
 								_p4._0.scope,
 								A3(
@@ -12087,10 +12117,10 @@ var _user$project$Internal$authenticate = F2(
 											'client_id',
 											_p5.clientId,
 											A3(_Bogdanp$elm_querystring$QueryString$add, 'grant_type', 'authorization_code', _Bogdanp$elm_querystring$QueryString$empty))))))));
-				return A4(_user$project$Internal$makeRequest, adjust, _p4._0.url, headers, body);
+				return A4(_user$project$OAuth_Internal$makeRequest, adjust, _p4._0.url, headers, body);
 			case 'ClientCredentials':
 				var _p6 = _p4._0.credentials;
-				var headers = _user$project$Internal$authHeader(
+				var headers = _user$project$OAuth_Internal$authHeader(
 					_elm_lang$core$Maybe$Just(
 						{clientId: _p6.clientId, secret: _p6.secret}));
 				var body = A2(
@@ -12098,27 +12128,27 @@ var _user$project$Internal$authenticate = F2(
 					1,
 					_Bogdanp$elm_querystring$QueryString$render(
 						A3(
-							_user$project$Internal$qsAddMaybe,
+							_user$project$OAuth_Internal$qsAddMaybe,
 							'state',
 							_p4._0.state,
 							A3(
-								_user$project$Internal$qsAddList,
+								_user$project$OAuth_Internal$qsAddList,
 								'scope',
 								_p4._0.scope,
 								A3(_Bogdanp$elm_querystring$QueryString$add, 'grant_type', 'client_credentials', _Bogdanp$elm_querystring$QueryString$empty)))));
-				return A4(_user$project$Internal$makeRequest, adjust, _p4._0.url, headers, body);
+				return A4(_user$project$OAuth_Internal$makeRequest, adjust, _p4._0.url, headers, body);
 			case 'Password':
-				var headers = _user$project$Internal$authHeader(_p4._0.credentials);
+				var headers = _user$project$OAuth_Internal$authHeader(_p4._0.credentials);
 				var body = A2(
 					_elm_lang$core$String$dropLeft,
 					1,
 					_Bogdanp$elm_querystring$QueryString$render(
 						A3(
-							_user$project$Internal$qsAddMaybe,
+							_user$project$OAuth_Internal$qsAddMaybe,
 							'state',
 							_p4._0.state,
 							A3(
-								_user$project$Internal$qsAddList,
+								_user$project$OAuth_Internal$qsAddList,
 								'scope',
 								_p4._0.scope,
 								A3(
@@ -12130,9 +12160,9 @@ var _user$project$Internal$authenticate = F2(
 										'username',
 										_p4._0.username,
 										A3(_Bogdanp$elm_querystring$QueryString$add, 'grant_type', 'password', _Bogdanp$elm_querystring$QueryString$empty)))))));
-				return A4(_user$project$Internal$makeRequest, adjust, _p4._0.url, headers, body);
+				return A4(_user$project$OAuth_Internal$makeRequest, adjust, _p4._0.url, headers, body);
 			default:
-				var headers = _user$project$Internal$authHeader(_p4._0.credentials);
+				var headers = _user$project$OAuth_Internal$authHeader(_p4._0.credentials);
 				var refreshToken = function () {
 					var _p7 = _p4._0.token;
 					return _p7._0;
@@ -12142,7 +12172,7 @@ var _user$project$Internal$authenticate = F2(
 					1,
 					_Bogdanp$elm_querystring$QueryString$render(
 						A3(
-							_user$project$Internal$qsAddList,
+							_user$project$OAuth_Internal$qsAddList,
 							'scope',
 							_p4._0.scope,
 							A3(
@@ -12150,18 +12180,18 @@ var _user$project$Internal$authenticate = F2(
 								'refresh_token',
 								refreshToken,
 								A3(_Bogdanp$elm_querystring$QueryString$add, 'grant_type', 'refresh_token', _Bogdanp$elm_querystring$QueryString$empty)))));
-				return A4(_user$project$Internal$makeRequest, adjust, _p4._0.url, headers, body);
+				return A4(_user$project$OAuth_Internal$makeRequest, adjust, _p4._0.url, headers, body);
 		}
 	});
-var _user$project$Internal$authorize = function (_p8) {
+var _user$project$OAuth_Internal$authorize = function (_p8) {
 	var _p9 = _p8;
 	var qs = _Bogdanp$elm_querystring$QueryString$render(
 		A3(
-			_user$project$Internal$qsAddMaybe,
+			_user$project$OAuth_Internal$qsAddMaybe,
 			'state',
 			_p9.state,
 			A3(
-				_user$project$Internal$qsAddList,
+				_user$project$OAuth_Internal$qsAddList,
 				'scope',
 				_p9.scope,
 				A3(
@@ -12202,7 +12232,7 @@ var _user$project$OAuth_Implicit$parse = function (_p0) {
 		if (_p2.ctor === '_Tuple2') {
 			if (_p2._0.ctor === 'Just') {
 				return A5(
-					_user$project$Internal$parseToken,
+					_user$project$OAuth_Internal$parseToken,
 					_p2._0._0,
 					gets('token_type'),
 					geti('expires_in'),
@@ -12211,7 +12241,7 @@ var _user$project$OAuth_Implicit$parse = function (_p0) {
 			} else {
 				if (_p2._1.ctor === 'Just') {
 					return A4(
-						_user$project$Internal$parseError,
+						_user$project$OAuth_Internal$parseError,
 						_p2._1._0,
 						gets('error_description'),
 						gets('error_uri'),
@@ -12226,15 +12256,15 @@ var _user$project$OAuth_Implicit$parse = function (_p0) {
 	} while(false);
 	return _elm_lang$core$Result$Err(_user$project$OAuth$Empty);
 };
-var _user$project$OAuth_Implicit$authorize = _user$project$Internal$authorize;
+var _user$project$OAuth_Implicit$authorize = _user$project$OAuth_Internal$authorize;
 
 var _user$project$Ports_LocalStorage$receiveLocalStorage = function (keyVal) {
 	var _p0 = keyVal;
 	if ((_p0.ctor === '_Tuple2') && (_p0._0 === 'profile')) {
-		var _p1 = A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Json_Profile$profileData, _p0._1);
+		var _p1 = A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Auth_Profile$profileData, _p0._1);
 		if (_p1.ctor === 'Ok') {
 			return _user$project$Model$Auth(
-				_user$project$Model$NewProfile(_p1._0));
+				_user$project$Model$ProfileLoaded(_p1._0));
 		} else {
 			return _user$project$Model$Nop;
 		}
@@ -12287,6 +12317,123 @@ var _user$project$Ports_LocalStorage$storageRemoveFromSet = _elm_lang$core$Nativ
 		return [v._0, v._1];
 	});
 
+var _user$project$Auth_Update$createOrUpdateProfile = F2(
+	function (profile, token) {
+		var _p0 = token;
+		if (_p0.ctor === 'Just') {
+			var body = _elm_lang$http$Http$jsonBody(
+				_user$project$Auth_Profile$encodeProfileRequest(
+					{username: profile.profile.username, token: _p0._0._0}));
+			return A2(
+				_elm_lang$http$Http$send,
+				function (_p1) {
+					return _user$project$Model$Auth(
+						_user$project$Model$ProfileRequest(_p1));
+				},
+				A3(_elm_lang$http$Http$post, '', body, _user$project$Auth_Profile$profileRequest));
+		} else {
+			return _elm_lang$core$Platform_Cmd$none;
+		}
+	});
+var _user$project$Auth_Update$update = F2(
+	function (msg, _p2) {
+		var _p3 = _p2;
+		var _p7 = _p3;
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'GetProfile':
+				var _p5 = _p4._0;
+				if (_p5.ctor === 'Err') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							_p7,
+							{
+								error: _elm_lang$core$Maybe$Just('unable to fetch user profile')
+							}),
+						{ctor: '[]'});
+				} else {
+					var _p6 = _p5._0;
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							_p7,
+							{
+								profile: _elm_lang$core$Maybe$Just(_p6)
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Ports_LocalStorage$storageSetItem(
+								{
+									ctor: '_Tuple2',
+									_0: 'profile',
+									_1: _user$project$Auth_Profile$encodeProfileData(_p6)
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(_user$project$Auth_Update$createOrUpdateProfile, _p6, _p3.token),
+								_1: {ctor: '[]'}
+							}
+						});
+				}
+			case 'ProfileLoaded':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						_p7,
+						{
+							profile: _elm_lang$core$Maybe$Just(_p4._0)
+						}),
+					{ctor: '[]'});
+			case 'Logout':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						_p7,
+						{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
+					{
+						ctor: '::',
+						_0: _user$project$Ports_LocalStorage$storageClear(
+							{ctor: '_Tuple0'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$navigation$Navigation$modifyUrl(''),
+							_1: {ctor: '[]'}
+						}
+					});
+			case 'Authorize':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_p7,
+					{
+						ctor: '::',
+						_0: _user$project$OAuth_Implicit$authorize(
+							{
+								clientId: _p7.oauth.clientId,
+								redirectUri: _p7.oauth.redirectUri,
+								responseType: _user$project$OAuth$Token,
+								scope: {
+									ctor: '::',
+									_0: 'basic',
+									_1: {
+										ctor: '::',
+										_0: 'public_content',
+										_1: {ctor: '[]'}
+									}
+								},
+								state: _elm_lang$core$Maybe$Nothing,
+								url: _user$project$Model$authorizationEndpoint
+							}),
+						_1: {ctor: '[]'}
+					});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_p7,
+					{ctor: '[]'});
+		}
+	});
+
 var _user$project$Init$init = function (location) {
 	var model = {
 		oauth: {
@@ -12307,7 +12454,7 @@ var _user$project$Init$init = function (location) {
 				withCredentials: false,
 				headers: {ctor: '[]'},
 				url: _user$project$Model$profileEndpoint(_p2),
-				expect: _elm_lang$http$Http$expectJson(_user$project$Json_Profile$profileData),
+				expect: _elm_lang$http$Http$expectJson(_user$project$Auth_Profile$profileData),
 				timeout: _elm_lang$core$Maybe$Nothing
 			});
 		return A2(
@@ -12371,100 +12518,15 @@ var _user$project$Init$init = function (location) {
 };
 
 var _user$project$Update$update = F2(
-	function (msg, _p0) {
-		var _p1 = _p0;
-		var _p6 = _p1;
-		var _p2 = msg;
-		if (_p2.ctor === 'Nop') {
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Nop') {
 			return A2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
-				_p6,
+				model,
 				{ctor: '[]'});
 		} else {
-			var _p3 = _p2._0;
-			switch (_p3.ctor) {
-				case 'GetProfile':
-					var _p4 = _p3._0;
-					if (_p4.ctor === 'Err') {
-						return A2(
-							_elm_lang$core$Platform_Cmd_ops['!'],
-							_elm_lang$core$Native_Utils.update(
-								_p6,
-								{
-									error: _elm_lang$core$Maybe$Just('unable to fetch user profile ¯\\_(ツ)_/¯')
-								}),
-							{ctor: '[]'});
-					} else {
-						var _p5 = _p4._0;
-						return A2(
-							_elm_lang$core$Platform_Cmd_ops['!'],
-							_elm_lang$core$Native_Utils.update(
-								_p6,
-								{
-									profile: _elm_lang$core$Maybe$Just(_p5)
-								}),
-							{
-								ctor: '::',
-								_0: _user$project$Ports_LocalStorage$storageSetItem(
-									{
-										ctor: '_Tuple2',
-										_0: 'profile',
-										_1: _user$project$Json_Profile$encodeProfileData(_p5)
-									}),
-								_1: {ctor: '[]'}
-							});
-					}
-				case 'NewProfile':
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							_p6,
-							{
-								profile: _elm_lang$core$Maybe$Just(_p3._0)
-							}),
-						{ctor: '[]'});
-				case 'Logout':
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							_p6,
-							{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
-						{
-							ctor: '::',
-							_0: _user$project$Ports_LocalStorage$storageClear(
-								{ctor: '_Tuple0'}),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$navigation$Navigation$modifyUrl(''),
-								_1: {ctor: '[]'}
-							}
-						});
-				default:
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_p6,
-						{
-							ctor: '::',
-							_0: _user$project$OAuth_Implicit$authorize(
-								{
-									clientId: _p6.oauth.clientId,
-									redirectUri: _p6.oauth.redirectUri,
-									responseType: _user$project$OAuth$Token,
-									scope: {
-										ctor: '::',
-										_0: 'basic',
-										_1: {
-											ctor: '::',
-											_0: 'public_content',
-											_1: {ctor: '[]'}
-										}
-									},
-									state: _elm_lang$core$Maybe$Nothing,
-									url: _user$project$Model$authorizationEndpoint
-								}),
-							_1: {ctor: '[]'}
-						});
-			}
+			return A2(_user$project$Auth_Update$update, _p0._0, model);
 		}
 	});
 

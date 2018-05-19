@@ -1,7 +1,7 @@
 module Model exposing (..)
 
+import Auth.Profile exposing (ProfileData, ProfileRequest)
 import Http
-import Json.Profile exposing (ProfileData)
 import OAuth
 
 
@@ -32,8 +32,8 @@ type alias Model =
         , redirectUri : String
         }
     , error : Maybe String
-    , token : Maybe OAuth.Token
     , profile : Maybe ProfileData
+    , token : Maybe OAuth.Token
     }
 
 
@@ -52,5 +52,6 @@ type Msg
 type AuthMsg
     = Authorize
     | GetProfile (Result Http.Error ProfileData)
-    | NewProfile ProfileData
+    | ProfileLoaded ProfileData
+    | ProfileRequest (Result Http.Error ProfileRequest)
     | Logout
