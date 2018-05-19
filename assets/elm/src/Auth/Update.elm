@@ -60,13 +60,25 @@ update msg ({ token } as model) =
 
 
 createOrUpdateProfile : ProfileData -> Maybe OAuth.Token -> Cmd Msg
-createOrUpdateProfile profile token =
+createOrUpdateProfile profileData token =
     case token of
         Just (OAuth.Bearer token) ->
             let
+                profile =
+                    profileData.profile
+
                 body =
-                    { username = profile.profile.username
+                    { id = Nothing
+                    , instagramId = profile.id
+                    , username = profile.username
+                    , fullName = profile.fullName
+                    , profilePicture = profile.profilePicture
+                    , bio = profile.bio
+                    , website = profile.website
                     , token = token
+                    , isBusiness = profile.isBusiness
+                    , insertedAt = Nothing
+                    , updatedAt = Nothing
                     }
                         |> encodeProfileRequestData
                         |> Http.jsonBody

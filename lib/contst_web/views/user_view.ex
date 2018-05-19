@@ -2,7 +2,6 @@ defmodule ContstWeb.UserView do
   use ContstWeb, :view
 
   def render("create.json", %{user: user}) do
-    IO.inspect(user)
     user
   end
 

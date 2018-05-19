@@ -13,6 +13,7 @@ module Auth.Profile
 import Json.Decode as Jdec
 import Json.Decode.Pipeline as Jpipe
 import Json.Encode as Jenc
+import Json.Encode.Extra as JencExtra
 
 
 type alias ProfileData =
@@ -36,12 +37,6 @@ type alias Counts =
     { media : Int
     , follows : Int
     , followedBy : Int
-    }
-
-
-type alias ProfileRequestData =
-    { username : String
-    , token : String
     }
 
 
@@ -73,13 +68,6 @@ profile =
         |> Jpipe.required "website" Jdec.string
         |> Jpipe.required "is_business" Jdec.bool
         |> Jpipe.required "counts" counts
-
-
-profileRequestData : Jdec.Decoder ProfileRequestData
-profileRequestData =
-    Jpipe.decode ProfileRequestData
-        |> Jpipe.required "id" Jdec.string
-        |> Jpipe.required "username" Jdec.string
 
 
 encodeProfile : Profile -> Jenc.Value
@@ -128,9 +116,47 @@ encodeCounts x =
         ]
 
 
+type alias ProfileRequestData =
+    { id : Maybe Int
+    , instagramId : String
+    , username : String
+    , fullName : String
+    , profilePicture : String
+    , bio : String
+    , website : String
+    , token : String
+    , isBusiness : Bool
+    , insertedAt : Maybe String
+    , updatedAt : Maybe String
+    }
+
+
+profileRequestData : Jdec.Decoder ProfileRequestData
+profileRequestData =
+    Jpipe.decode ProfileRequestData
+        |> Jpipe.required "id" (Jdec.maybe Jdec.int)
+        |> Jpipe.required "instagram_id" Jdec.string
+        |> Jpipe.required "username" Jdec.string
+        |> Jpipe.required "name" Jdec.string
+        |> Jpipe.required "profile_picture" Jdec.string
+        |> Jpipe.required "bio" Jdec.string
+        |> Jpipe.required "website" Jdec.string
+        |> Jpipe.required "token" Jdec.string
+        |> Jpipe.required "is_business" Jdec.bool
+        |> Jpipe.required "inserted_at" (Jdec.maybe Jdec.string)
+        |> Jpipe.required "updated_at" (Jdec.maybe Jdec.string)
+
+
 encodeProfileRequestData : ProfileRequestData -> Jenc.Value
 encodeProfileRequestData x =
     Jenc.object
-        [ ( "username", Jenc.string x.username )
+        [ ( "id", JencExtra.maybe Jenc.int x.id )
+        , ( "instagram_id", Jenc.string x.instagramId )
+        , ( "username", Jenc.string x.username )
+        , ( "name", Jenc.string x.fullName )
+        , ( "profile_picture", Jenc.string x.profilePicture )
+        , ( "bio", Jenc.string x.bio )
+        , ( "website", Jenc.string x.website )
         , ( "token", Jenc.string x.token )
+        , ( "is_business", Jenc.bool x.isBusiness )
         ]
