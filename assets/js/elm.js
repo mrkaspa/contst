@@ -11629,24 +11629,32 @@ var _user$project$Auth_Profile$encodeProfileRequestResponse = function (x) {
 											ctor: '::',
 											_0: {
 												ctor: '_Tuple2',
-												_0: 'is_business',
-												_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$bool, x.isBusiness)
+												_0: 'api_token',
+												_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.apiToken)
 											},
 											_1: {
 												ctor: '::',
 												_0: {
 													ctor: '_Tuple2',
-													_0: 'updated_at',
-													_1: _elm_lang$core$Json_Encode$string(x.updatedAt)
+													_0: 'is_business',
+													_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$bool, x.isBusiness)
 												},
 												_1: {
 													ctor: '::',
 													_0: {
 														ctor: '_Tuple2',
-														_0: 'inserted_at',
-														_1: _elm_lang$core$Json_Encode$string(x.insertedAt)
+														_0: 'updated_at',
+														_1: _elm_lang$core$Json_Encode$string(x.updatedAt)
 													},
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: {
+															ctor: '_Tuple2',
+															_0: 'inserted_at',
+															_1: _elm_lang$core$Json_Encode$string(x.insertedAt)
+														},
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
@@ -11945,7 +11953,9 @@ var _user$project$Auth_Profile$ProfileRequestResponse = function (a) {
 								return function (i) {
 									return function (j) {
 										return function (k) {
-											return {id: a, instagramId: b, username: c, fullName: d, profilePicture: e, bio: f, website: g, token: h, isBusiness: i, insertedAt: j, updatedAt: k};
+											return function (l) {
+												return {id: a, instagramId: b, username: c, fullName: d, profilePicture: e, bio: f, website: g, token: h, apiToken: i, isBusiness: j, insertedAt: k, updatedAt: l};
+											};
 										};
 									};
 								};
@@ -11971,37 +11981,41 @@ var _user$project$Auth_Profile$profileRequestResponse = A3(
 			_elm_lang$core$Json_Decode$maybe(_elm_lang$core$Json_Decode$bool),
 			A3(
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'token',
+				'api_token',
 				_elm_lang$core$Json_Decode$maybe(_elm_lang$core$Json_Decode$string),
 				A3(
 					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'website',
+					'token',
 					_elm_lang$core$Json_Decode$maybe(_elm_lang$core$Json_Decode$string),
 					A3(
 						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-						'bio',
+						'website',
 						_elm_lang$core$Json_Decode$maybe(_elm_lang$core$Json_Decode$string),
 						A3(
 							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-							'profile_picture',
+							'bio',
 							_elm_lang$core$Json_Decode$maybe(_elm_lang$core$Json_Decode$string),
 							A3(
 								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-								'name',
-								_elm_lang$core$Json_Decode$string,
+								'profile_picture',
+								_elm_lang$core$Json_Decode$maybe(_elm_lang$core$Json_Decode$string),
 								A3(
 									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-									'username',
+									'name',
 									_elm_lang$core$Json_Decode$string,
 									A3(
 										_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-										'instagram_id',
+										'username',
 										_elm_lang$core$Json_Decode$string,
 										A3(
 											_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-											'id',
-											_elm_lang$core$Json_Decode$int,
-											_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequestResponse))))))))))));
+											'instagram_id',
+											_elm_lang$core$Json_Decode$string,
+											A3(
+												_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+												'id',
+												_elm_lang$core$Json_Decode$int,
+												_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequestResponse)))))))))))));
 
 var _user$project$OAuth_OAuth$showErrCode = function (err) {
 	var _p0 = err;

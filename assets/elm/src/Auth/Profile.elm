@@ -167,6 +167,7 @@ type alias ProfileRequestResponse =
     , bio : Maybe String
     , website : Maybe String
     , token : Maybe String
+    , apiToken : Maybe String
     , isBusiness : Maybe Bool
     , insertedAt : String
     , updatedAt : String
@@ -184,6 +185,7 @@ profileRequestResponse =
         |> Jpipe.required "bio" (Jdec.maybe Jdec.string)
         |> Jpipe.required "website" (Jdec.maybe Jdec.string)
         |> Jpipe.required "token" (Jdec.maybe Jdec.string)
+        |> Jpipe.required "api_token" (Jdec.maybe Jdec.string)
         |> Jpipe.required "is_business" (Jdec.maybe Jdec.bool)
         |> Jpipe.required "inserted_at" Jdec.string
         |> Jpipe.required "updated_at" Jdec.string
@@ -200,6 +202,7 @@ encodeProfileRequestResponse x =
         , ( "bio", JencExtra.maybe Jenc.string x.bio )
         , ( "website", JencExtra.maybe Jenc.string x.website )
         , ( "token", JencExtra.maybe Jenc.string x.token )
+        , ( "api_token", JencExtra.maybe Jenc.string x.apiToken )
         , ( "is_business", JencExtra.maybe Jenc.bool x.isBusiness )
         , ( "updated_at", Jenc.string x.updatedAt )
         , ( "inserted_at", Jenc.string x.insertedAt )

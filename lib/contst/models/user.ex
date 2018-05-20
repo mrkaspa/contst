@@ -39,4 +39,10 @@ defmodule Contst.Models.User do
     |> cast(params, @register_attrs)
     |> validate_required(@register_required_attrs)
   end
+
+  def api_token_changeset(struct, api_token) do
+    struct
+    |> cast(%{api_token: api_token}, [:api_token])
+    |> validate_required([:api_token])
+  end
 end
