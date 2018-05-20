@@ -9,6 +9,7 @@ defmodule Contst.Repo.Migrations.CreatePosts do
       add(:likes, :integer, null: false)
       add(:comments, :integer, null: false)
       add(:valid, :boolean, null: false, default: true)
+      add(:winner, :boolean, null: false, default: false)
 
       timestamps(type: :utc_datetime)
     end

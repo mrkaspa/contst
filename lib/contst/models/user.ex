@@ -13,6 +13,8 @@ defmodule Contst.Models.User do
     field(:website, :string)
     field(:is_business, :boolean)
 
+    has_many(:campaigns, Contst.Models.Campaign)
+
     timestamps()
   end
 

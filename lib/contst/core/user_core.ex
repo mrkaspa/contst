@@ -15,7 +15,7 @@ defmodule Contst.Core.UserCore do
   end
 
   @spec store_user(%User{}, map) :: Contst.Types.transaction()
-  def(store_user(user, params)) do
+  def store_user(user, params) do
     Multi.new()
     |> Multi.insert_or_update(:user, User.register_changeset(user, params))
     |> Multi.run(:user_token, fn
@@ -26,6 +26,10 @@ defmodule Contst.Core.UserCore do
         {:ok, user}
     end)
     |> Repo.transaction()
+  end
+
+  def decode_token(token) do
+    Phoenix.Token.verify(ContstWeb.Endpoint, get_seed(), token)
   end
 
   defp store_token(%User{id: user_id} = user) do

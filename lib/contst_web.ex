@@ -46,6 +46,11 @@ defmodule ContstWeb do
         %{}
       end
 
+      def render("errors.json", %{changeset: changeset}) do
+        errors = errors_to_json(changeset)
+        %{errors: errors}
+      end
+
       def errors_to_json(changeset) do
         Ecto.Changeset.traverse_errors(changeset, &:erlang.element(1, &1))
       end

@@ -26,4 +26,10 @@ defmodule ContstWeb.Router do
 
     resources("/users", UserController, only: [:create])
   end
+
+  scope "/api", ContstWeb do
+    pipe_through([:api, ContstWeb.ValidateSessionPlug])
+
+    resources("/campaigns", CampaignController, only: [:index, :show, :create, :update, :delete])
+  end
 end

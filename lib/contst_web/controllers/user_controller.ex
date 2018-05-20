@@ -12,7 +12,7 @@ defmodule ContstWeb.UserController do
       {:error, _, %Ecto.Changeset{} = changeset, _} ->
         conn
         |> put_status(:bad_request)
-        |> render("create.json", changeset: changeset)
+        |> render("errors.json", changeset: changeset)
     end
   end
 
