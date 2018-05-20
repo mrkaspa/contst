@@ -2,26 +2,30 @@ module Init exposing (init)
 
 import Auth.Profile exposing (profileData)
 import Http
-import Model exposing (AuthMsg(..), Model, Msg(..), profileEndpoint)
+import Model exposing (AuthMsg(..), Model, Msg(..), Page(..), profileEndpoint)
 import Navigation
 import OAuth.Implicit
 import OAuth.OAuth as OAuth
 import Ports.LocalStorage exposing (..)
+import Utils.Helper exposing (getPage)
 
 
 init : Navigation.Location -> ( Model, Cmd Msg )
 init location =
     let
         model =
-            { oauth =
-                { clientId = "51d99f475ebf45239680bde75d5eb9fd"
-                , redirectUri = location.origin ++ location.pathname
-                }
-            , error = Nothing
-            , token = Nothing
-            , profile = Nothing
-            }
+            initState location
     in
+    case getPage location of
+        Index ->
+            oauthFlow { model | page = Index } location
+
+        page ->
+            { model | page = page } ! []
+
+
+oauthFlow : Model -> Navigation.Location -> ( Model, Cmd Msg )
+oauthFlow model location =
     case OAuth.Implicit.parse location of
         Ok { token } ->
             let
@@ -50,3 +54,16 @@ init location =
 
         Err _ ->
             { model | error = Just "parsing error" } ! []
+
+
+initState : Navigation.Location -> Model
+initState location =
+    { oauth =
+        { clientId = "51d99f475ebf45239680bde75d5eb9fd"
+        , redirectUri = location.origin ++ location.pathname
+        }
+    , page = Index
+    , error = Nothing
+    , token = Nothing
+    , profile = Nothing
+    }

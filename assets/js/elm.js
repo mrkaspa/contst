@@ -12158,10 +12158,15 @@ var _user$project$Model$profileEndpoint = function (token) {
 	return A2(_elm_lang$core$Basics_ops['++'], 'https://api.instagram.com/v1/users/self?access_token=', _p0._0);
 };
 var _user$project$Model$authorizationEndpoint = 'https://api.instagram.com/oauth/authorize';
-var _user$project$Model$Model = F4(
-	function (a, b, c, d) {
-		return {oauth: a, error: b, profile: c, token: d};
+var _user$project$Model$Model = F5(
+	function (a, b, c, d, e) {
+		return {oauth: a, page: b, error: c, profile: d, token: e};
 	});
+var _user$project$Model$Dashboard = {ctor: 'Dashboard'};
+var _user$project$Model$Index = {ctor: 'Index'};
+var _user$project$Model$NewUrl = function (a) {
+	return {ctor: 'NewUrl', _0: a};
+};
 var _user$project$Model$Auth = function (a) {
 	return {ctor: 'Auth', _0: a};
 };
@@ -12587,6 +12592,26 @@ var _user$project$Ports_LocalStorage$storageRemoveFromSet = _elm_lang$core$Nativ
 		return [v._0, v._1];
 	});
 
+var _user$project$Utils_Helper$isNothing = function (maybe) {
+	var _p0 = maybe;
+	if (_p0.ctor === 'Nothing') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _user$project$Utils_Helper$getPage = function (_p1) {
+	var _p2 = _p1;
+	var _p3 = _p2.hash;
+	switch (_p3) {
+		case '':
+			return _user$project$Model$Index;
+		case '#main':
+			return _user$project$Model$Dashboard;
+		default:
+			return _user$project$Model$Index;
+	}
+};
 var _user$project$Utils_Helper$send = function (msg) {
 	return A2(
 		_elm_lang$core$Task$perform,
@@ -12693,7 +12718,11 @@ var _user$project$Auth_Update$update = F2(
 									_0: 'profile',
 									_1: _user$project$Auth_Profile$encodeProfileRequestResponse(_p7)
 								}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$navigation$Navigation$modifyUrl('#main'),
+								_1: {ctor: '[]'}
+							}
 						});
 				} else {
 					return A2(
@@ -12722,110 +12751,14 @@ var _user$project$Auth_Update$update = F2(
 							{ctor: '_Tuple0'}),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$navigation$Navigation$modifyUrl(''),
+							_0: _elm_lang$navigation$Navigation$modifyUrl('#'),
 							_1: {ctor: '[]'}
 						}
 					});
 		}
 	});
 
-var _user$project$Init$init = function (location) {
-	var model = {
-		oauth: {
-			clientId: '51d99f475ebf45239680bde75d5eb9fd',
-			redirectUri: A2(_elm_lang$core$Basics_ops['++'], location.origin, location.pathname)
-		},
-		error: _elm_lang$core$Maybe$Nothing,
-		token: _elm_lang$core$Maybe$Nothing,
-		profile: _elm_lang$core$Maybe$Nothing
-	};
-	var _p0 = _user$project$OAuth_Implicit$parse(location);
-	if (_p0.ctor === 'Ok') {
-		var _p2 = _p0._0.token;
-		var req = _elm_lang$http$Http$request(
-			{
-				method: 'GET',
-				body: _elm_lang$http$Http$emptyBody,
-				withCredentials: false,
-				headers: {ctor: '[]'},
-				url: _user$project$Model$profileEndpoint(_p2),
-				expect: _elm_lang$http$Http$expectJson(_user$project$Auth_Profile$profileData),
-				timeout: _elm_lang$core$Maybe$Nothing
-			});
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{
-					token: _elm_lang$core$Maybe$Just(_p2)
-				}),
-			{
-				ctor: '::',
-				_0: _elm_lang$navigation$Navigation$modifyUrl(model.oauth.redirectUri),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$http$Http$send,
-						function (_p1) {
-							return _user$project$Model$Auth(
-								_user$project$Model$GetProfile(_p1));
-						},
-						req),
-					_1: {ctor: '[]'}
-				}
-			});
-	} else {
-		switch (_p0._0.ctor) {
-			case 'Empty':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					{
-						ctor: '::',
-						_0: _user$project$Ports_LocalStorage$storageGetItem('profile'),
-						_1: {ctor: '[]'}
-					});
-			case 'OAuthErr':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							error: _elm_lang$core$Maybe$Just(
-								_user$project$OAuth_OAuth$showErrCode(_p0._0._0.error))
-						}),
-					{
-						ctor: '::',
-						_0: _elm_lang$navigation$Navigation$modifyUrl(model.oauth.redirectUri),
-						_1: {ctor: '[]'}
-					});
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							error: _elm_lang$core$Maybe$Just('parsing error')
-						}),
-					{ctor: '[]'});
-		}
-	}
-};
-
-var _user$project$Update$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'Nop') {
-			return A2(
-				_elm_lang$core$Platform_Cmd_ops['!'],
-				model,
-				{ctor: '[]'});
-		} else {
-			return A2(_user$project$Auth_Update$update, _p0._0, model);
-		}
-	});
-
-var _user$project$View$view = function (model) {
+var _user$project$Auth_View$view = function (model) {
 	var content = function () {
 		var _p0 = {ctor: '_Tuple2', _0: model.token, _1: model.profile};
 		if (_p0._1.ctor === 'Nothing') {
@@ -13017,14 +12950,6 @@ var _user$project$View$view = function (model) {
 				});
 		}
 	}();
-	var isNothing = function (maybe) {
-		var _p2 = maybe;
-		if (_p2.ctor === 'Nothing') {
-			return true;
-		} else {
-			return false;
-		}
-	};
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -13088,7 +13013,7 @@ var _user$project$View$view = function (model) {
 								_0: {
 									ctor: '_Tuple2',
 									_0: 'display',
-									_1: isNothing(model.error) ? 'none' : 'block'
+									_1: _user$project$Utils_Helper$isNothing(model.error) ? 'none' : 'block'
 								},
 								_1: {
 									ctor: '::',
@@ -13141,9 +13066,164 @@ var _user$project$View$view = function (model) {
 		});
 };
 
+var _user$project$Init$initState = function (location) {
+	return {
+		oauth: {
+			clientId: '51d99f475ebf45239680bde75d5eb9fd',
+			redirectUri: A2(_elm_lang$core$Basics_ops['++'], location.origin, location.pathname)
+		},
+		page: _user$project$Model$Index,
+		error: _elm_lang$core$Maybe$Nothing,
+		token: _elm_lang$core$Maybe$Nothing,
+		profile: _elm_lang$core$Maybe$Nothing
+	};
+};
+var _user$project$Init$oauthFlow = F2(
+	function (model, location) {
+		var _p0 = _user$project$OAuth_Implicit$parse(location);
+		if (_p0.ctor === 'Ok') {
+			var _p2 = _p0._0.token;
+			var req = _elm_lang$http$Http$request(
+				{
+					method: 'GET',
+					body: _elm_lang$http$Http$emptyBody,
+					withCredentials: false,
+					headers: {ctor: '[]'},
+					url: _user$project$Model$profileEndpoint(_p2),
+					expect: _elm_lang$http$Http$expectJson(_user$project$Auth_Profile$profileData),
+					timeout: _elm_lang$core$Maybe$Nothing
+				});
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{
+						token: _elm_lang$core$Maybe$Just(_p2)
+					}),
+				{
+					ctor: '::',
+					_0: _elm_lang$navigation$Navigation$modifyUrl(model.oauth.redirectUri),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$http$Http$send,
+							function (_p1) {
+								return _user$project$Model$Auth(
+									_user$project$Model$GetProfile(_p1));
+							},
+							req),
+						_1: {ctor: '[]'}
+					}
+				});
+		} else {
+			switch (_p0._0.ctor) {
+				case 'Empty':
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						model,
+						{
+							ctor: '::',
+							_0: _user$project$Ports_LocalStorage$storageGetItem('profile'),
+							_1: {ctor: '[]'}
+						});
+				case 'OAuthErr':
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Maybe$Just(
+									_user$project$OAuth_OAuth$showErrCode(_p0._0._0.error))
+							}),
+						{
+							ctor: '::',
+							_0: _elm_lang$navigation$Navigation$modifyUrl(model.oauth.redirectUri),
+							_1: {ctor: '[]'}
+						});
+				default:
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								error: _elm_lang$core$Maybe$Just('parsing error')
+							}),
+						{ctor: '[]'});
+			}
+		}
+	});
+var _user$project$Init$init = function (location) {
+	var model = _user$project$Init$initState(location);
+	var _p3 = _user$project$Utils_Helper$getPage(location);
+	if (_p3.ctor === 'Index') {
+		return A2(
+			_user$project$Init$oauthFlow,
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{page: _user$project$Model$Index}),
+			location);
+	} else {
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{page: _p3}),
+			{ctor: '[]'});
+	}
+};
+
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Nop':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			case 'NewUrl':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							page: _user$project$Utils_Helper$getPage(_p0._0)
+						}),
+					{ctor: '[]'});
+			default:
+				return A2(_user$project$Auth_Update$update, _p0._0, model);
+		}
+	});
+
+var _user$project$View$view = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1.page;
+	if (_p2.ctor === 'Index') {
+		return _user$project$Auth_View$view(_p1);
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('demo'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	}
+};
+
 var _user$project$Main$main = A2(
 	_elm_lang$navigation$Navigation$program,
-	_elm_lang$core$Basics$always(_user$project$Model$Nop),
+	function (location) {
+		return _user$project$Model$NewUrl(location);
+	},
 	{
 		init: _user$project$Init$init,
 		update: _user$project$Update$update,

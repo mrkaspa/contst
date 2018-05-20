@@ -2,7 +2,7 @@ module Auth.Update exposing (update)
 
 import Auth.Profile exposing (ProfileData, encodeProfileRequestData, encodeProfileRequestResponse, profileData, profileRequestResponse)
 import Http
-import Model exposing (AuthMsg(..), Model, Msg(..), authorizationEndpoint)
+import Model exposing (AuthMsg(..), Model, Msg(..), Page(..), authorizationEndpoint)
 import Navigation
 import OAuth.Implicit
 import OAuth.OAuth as OAuth
@@ -42,7 +42,10 @@ update msg ({ token } as model) =
         ProfileRequest res ->
             case res of
                 Ok profile ->
-                    { model | profile = Just profile } ! [ storageSetItem ( "profile", encodeProfileRequestResponse profile ) ]
+                    { model | profile = Just profile }
+                        ! [ storageSetItem ( "profile", encodeProfileRequestResponse profile )
+                          , Navigation.modifyUrl "#main"
+                          ]
 
                 Err err ->
                     { model | error = Just "unable create profile" }
@@ -51,7 +54,7 @@ update msg ({ token } as model) =
         Logout ->
             { model | profile = Nothing, token = Nothing }
                 ! [ storageClear ()
-                  , Navigation.modifyUrl ""
+                  , Navigation.modifyUrl "#"
                   ]
 
 

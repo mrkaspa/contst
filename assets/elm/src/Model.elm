@@ -2,6 +2,7 @@ module Model exposing (..)
 
 import Auth.Profile exposing (ProfileData, ProfileRequestResponse)
 import Http
+import Navigation
 import OAuth.OAuth as OAuth
 
 
@@ -26,11 +27,17 @@ profileEndpoint token =
 -- Basic Application Model
 
 
+type Page
+    = Index
+    | Dashboard
+
+
 type alias Model =
     { oauth :
         { clientId : String
         , redirectUri : String
         }
+    , page : Page
     , error : Maybe String
     , profile : Maybe ProfileRequestResponse
     , token : Maybe OAuth.Token
@@ -47,6 +54,7 @@ type alias Model =
 type Msg
     = Nop
     | Auth AuthMsg
+    | NewUrl Navigation.Location
 
 
 type AuthMsg

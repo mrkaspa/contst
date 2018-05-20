@@ -11,7 +11,7 @@ import View exposing (view)
 main : Program Never Model Msg
 main =
     Navigation.program
-        (always Nop)
+        (\location -> NewUrl location)
         { init = init
         , update = update
         , view = view
