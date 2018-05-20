@@ -27,11 +27,6 @@ profileEndpoint token =
 -- Basic Application Model
 
 
-type Page
-    = Index
-    | Dashboard
-
-
 type alias Model =
     { oauth :
         { clientId : String
@@ -42,6 +37,18 @@ type alias Model =
     , profile : Maybe ProfileRequestResponse
     , token : Maybe OAuth.Token
     }
+
+
+
+-- Pages
+
+
+type Page
+    = Index
+    | Dashboard
+    | Campaigns
+    | CampaignDetail Int
+    | NotFound
 
 
 

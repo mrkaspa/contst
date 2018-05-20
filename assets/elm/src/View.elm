@@ -15,7 +15,12 @@ view ({ page } as model) =
         Index ->
             AuthView.view model
 
-        Dashboard ->
+        NotFound ->
             div []
-                [ h1 [] [ text "demo" ]
+                [ h1 [] [ text "Page Not Found" ]
+                ]
+
+        _ ->
+            div []
+                [ h1 [] [ text "In progress" ]
                 ]
