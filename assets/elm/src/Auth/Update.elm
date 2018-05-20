@@ -1,6 +1,6 @@
 module Auth.Update exposing (update)
 
-import Auth.Profile exposing (ProfileData, encodeProfileData, encodeProfileRequestData, profileData, profileRequestResponse)
+import Auth.Profile exposing (ProfileData, encodeProfileRequestData, encodeProfileRequestResponse, profileData, profileRequestResponse)
 import Http
 import Model exposing (AuthMsg(..), Model, Msg(..), authorizationEndpoint)
 import Navigation
@@ -13,26 +13,6 @@ import Utils.Helper exposing (send)
 update : AuthMsg -> Model -> ( Model, Cmd Msg )
 update msg ({ token } as model) =
     case msg of
-        GetProfile res ->
-            case res of
-                Ok profile ->
-                    { model | profile = Just profile }
-                        ! [ storageSetItem ( "profile", encodeProfileData profile )
-                          , createOrUpdateProfile profile token
-                          ]
-
-                Err err ->
-                    { model | error = Just "unable to fetch user profile" } ! []
-
-        ProfileLoaded profile ->
-            { model | profile = Just profile } ! []
-
-        Logout ->
-            { model | profile = Nothing, token = Nothing }
-                ! [ storageClear ()
-                  , Navigation.modifyUrl ""
-                  ]
-
         Authorize ->
             model
                 ! [ OAuth.Implicit.authorize
@@ -45,18 +25,34 @@ update msg ({ token } as model) =
                         }
                   ]
 
-        ProfileRequest res ->
+        GetProfile res ->
             case res of
-                Ok _ ->
-                    model ! []
+                Ok profile ->
+                    model
+                        ! [ createOrUpdateProfile profile token ]
 
                 Err err ->
-                    let
-                        _ =
-                            Debug.log "err req = " err
-                    in
+                    { model | error = Just "unable to fetch user profile" } ! []
+
+        -- from local storage
+        ProfileLoaded profile ->
+            { model | profile = Just profile } ! []
+
+        -- from http
+        ProfileRequest res ->
+            case res of
+                Ok profile ->
+                    { model | profile = Just profile } ! [ storageSetItem ( "profile", encodeProfileRequestResponse profile ) ]
+
+                Err err ->
                     { model | error = Just "unable create profile" }
                         ! [ send (Auth Logout) ]
+
+        Logout ->
+            { model | profile = Nothing, token = Nothing }
+                ! [ storageClear ()
+                  , Navigation.modifyUrl ""
+                  ]
 
 
 createOrUpdateProfile : ProfileData -> Maybe OAuth.Token -> Cmd Msg

@@ -11,7 +11,7 @@ defmodule ContstWeb.UserController do
       user ->
         user
     end
-    |> User.changeset(params)
+    |> User.register_changeset(params)
     |> Repo.insert_or_update()
     |> case do
       {:ok, user} ->

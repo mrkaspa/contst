@@ -32,7 +32,7 @@ type alias Model =
         , redirectUri : String
         }
     , error : Maybe String
-    , profile : Maybe ProfileData
+    , profile : Maybe ProfileRequestResponse
     , token : Maybe OAuth.Token
     }
 
@@ -52,6 +52,6 @@ type Msg
 type AuthMsg
     = Authorize
     | GetProfile (Result Http.Error ProfileData)
-    | ProfileLoaded ProfileData
+    | ProfileLoaded ProfileRequestResponse
     | ProfileRequest (Result Http.Error ProfileRequestResponse)
     | Logout

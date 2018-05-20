@@ -6,6 +6,7 @@ defmodule Contst.Models.User do
     field(:instagram_id, :string)
     field(:username, :string)
     field(:token, :string)
+    field(:api_token, :string)
     field(:name, :string)
     field(:profile_picture, :string)
     field(:bio, :string)
@@ -33,7 +34,7 @@ defmodule Contst.Models.User do
     :token
   ]
 
-  def changeset(struct, params \\ %{}) do
+  def register_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @register_attrs)
     |> validate_required(@register_required_attrs)

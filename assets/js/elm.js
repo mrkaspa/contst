@@ -8121,6 +8121,30 @@ var _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required = F3(
 			decoder);
 	});
 
+var _elm_community$json_extra$Json_Encode_Extra$dict = F3(
+	function (toKey, toValue, dict) {
+		return _elm_lang$core$Json_Encode$object(
+			A2(
+				_elm_lang$core$List$map,
+				function (_p0) {
+					var _p1 = _p0;
+					return {
+						ctor: '_Tuple2',
+						_0: toKey(_p1._0),
+						_1: toValue(_p1._1)
+					};
+				},
+				_elm_lang$core$Dict$toList(dict)));
+	});
+var _elm_community$json_extra$Json_Encode_Extra$maybe = function (encoder) {
+	return function (_p2) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_elm_lang$core$Json_Encode$null,
+			A2(_elm_lang$core$Maybe$map, encoder, _p2));
+	};
+};
+
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
 var _elm_lang$core$Process$spawn = _elm_lang$core$Native_Scheduler.spawn;
@@ -11543,6 +11567,98 @@ var _truqu$elm_base64$Base64$encode = function (s) {
 					_truqu$elm_base64$Base64$toCodeList(s)))));
 };
 
+var _user$project$Auth_Profile$encodeProfileRequestResponse = function (x) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'id',
+				_1: _elm_lang$core$Json_Encode$int(x.id)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'instagram_id',
+					_1: _elm_lang$core$Json_Encode$string(x.instagramId)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'username',
+						_1: _elm_lang$core$Json_Encode$string(x.username)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'name',
+							_1: _elm_lang$core$Json_Encode$string(x.fullName)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'profile_picture',
+								_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.profilePicture)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'bio',
+									_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.bio)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'website',
+										_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.website)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'token',
+											_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$string, x.token)
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'is_business',
+												_1: A2(_elm_community$json_extra$Json_Encode_Extra$maybe, _elm_lang$core$Json_Encode$bool, x.isBusiness)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'updated_at',
+													_1: _elm_lang$core$Json_Encode$string(x.updatedAt)
+												},
+												_1: {
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: 'inserted_at',
+														_1: _elm_lang$core$Json_Encode$string(x.insertedAt)
+													},
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
 var _user$project$Auth_Profile$encodeProfileRequestData = function (x) {
 	return _elm_lang$core$Json_Encode$object(
 		{
@@ -11785,6 +11901,39 @@ var _user$project$Auth_Profile$ProfileRequestData = F8(
 	function (a, b, c, d, e, f, g, h) {
 		return {instagramId: a, username: b, fullName: c, profilePicture: d, bio: e, website: f, token: g, isBusiness: h};
 	});
+var _user$project$Auth_Profile$profileRequestData = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'is_business',
+	_elm_lang$core$Json_Decode$bool,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'token',
+		_elm_lang$core$Json_Decode$string,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'website',
+			_elm_lang$core$Json_Decode$string,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'bio',
+				_elm_lang$core$Json_Decode$string,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'profile_picture',
+					_elm_lang$core$Json_Decode$string,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'name',
+						_elm_lang$core$Json_Decode$string,
+						A3(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+							'username',
+							_elm_lang$core$Json_Decode$string,
+							A3(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+								'instagram_id',
+								_elm_lang$core$Json_Decode$string,
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Auth_Profile$ProfileRequestData)))))))));
 var _user$project$Auth_Profile$ProfileRequestResponse = function (a) {
 	return function (b) {
 		return function (c) {
@@ -12368,7 +12517,7 @@ var _user$project$OAuth_Implicit$authorize = _user$project$OAuth_Internal$author
 var _user$project$Ports_LocalStorage$receiveLocalStorage = function (keyVal) {
 	var _p0 = keyVal;
 	if ((_p0.ctor === '_Tuple2') && (_p0._0 === 'profile')) {
-		var _p1 = A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Auth_Profile$profileData, _p0._1);
+		var _p1 = A2(_elm_lang$core$Json_Decode$decodeValue, _user$project$Auth_Profile$profileRequestResponse, _p0._1);
 		if (_p1.ctor === 'Ok') {
 			return _user$project$Model$Auth(
 				_user$project$Model$ProfileLoaded(_p1._0));
@@ -12453,79 +12602,19 @@ var _user$project$Auth_Update$createOrUpdateProfile = F2(
 var _user$project$Auth_Update$update = F2(
 	function (msg, _p2) {
 		var _p3 = _p2;
-		var _p9 = _p3;
+		var _p8 = _p3;
 		var _p4 = msg;
 		switch (_p4.ctor) {
-			case 'GetProfile':
-				var _p5 = _p4._0;
-				if (_p5.ctor === 'Ok') {
-					var _p6 = _p5._0;
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							_p9,
-							{
-								profile: _elm_lang$core$Maybe$Just(_p6)
-							}),
-						{
-							ctor: '::',
-							_0: _user$project$Ports_LocalStorage$storageSetItem(
-								{
-									ctor: '_Tuple2',
-									_0: 'profile',
-									_1: _user$project$Auth_Profile$encodeProfileData(_p6)
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(_user$project$Auth_Update$createOrUpdateProfile, _p6, _p3.token),
-								_1: {ctor: '[]'}
-							}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							_p9,
-							{
-								error: _elm_lang$core$Maybe$Just('unable to fetch user profile')
-							}),
-						{ctor: '[]'});
-				}
-			case 'ProfileLoaded':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						_p9,
-						{
-							profile: _elm_lang$core$Maybe$Just(_p4._0)
-						}),
-					{ctor: '[]'});
-			case 'Logout':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						_p9,
-						{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
-					{
-						ctor: '::',
-						_0: _user$project$Ports_LocalStorage$storageClear(
-							{ctor: '_Tuple0'}),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$navigation$Navigation$modifyUrl(''),
-							_1: {ctor: '[]'}
-						}
-					});
 			case 'Authorize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p9,
+					_p8,
 					{
 						ctor: '::',
 						_0: _user$project$OAuth_Implicit$authorize(
 							{
-								clientId: _p9.oauth.clientId,
-								redirectUri: _p9.oauth.redirectUri,
+								clientId: _p8.oauth.clientId,
+								redirectUri: _p8.oauth.redirectUri,
 								responseType: _user$project$OAuth_OAuth$Token,
 								scope: {
 									ctor: '::',
@@ -12541,19 +12630,62 @@ var _user$project$Auth_Update$update = F2(
 							}),
 						_1: {ctor: '[]'}
 					});
-			default:
-				var _p7 = _p4._0;
-				if (_p7.ctor === 'Ok') {
+			case 'GetProfile':
+				var _p5 = _p4._0;
+				if (_p5.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
-						_p9,
-						{ctor: '[]'});
+						_p8,
+						{
+							ctor: '::',
+							_0: A2(_user$project$Auth_Update$createOrUpdateProfile, _p5._0, _p3.token),
+							_1: {ctor: '[]'}
+						});
 				} else {
-					var _p8 = A2(_elm_lang$core$Debug$log, 'err req = ', _p7._0);
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
-							_p9,
+							_p8,
+							{
+								error: _elm_lang$core$Maybe$Just('unable to fetch user profile')
+							}),
+						{ctor: '[]'});
+				}
+			case 'ProfileLoaded':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						_p8,
+						{
+							profile: _elm_lang$core$Maybe$Just(_p4._0)
+						}),
+					{ctor: '[]'});
+			case 'ProfileRequest':
+				var _p6 = _p4._0;
+				if (_p6.ctor === 'Ok') {
+					var _p7 = _p6._0;
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							_p8,
+							{
+								profile: _elm_lang$core$Maybe$Just(_p7)
+							}),
+						{
+							ctor: '::',
+							_0: _user$project$Ports_LocalStorage$storageSetItem(
+								{
+									ctor: '_Tuple2',
+									_0: 'profile',
+									_1: _user$project$Auth_Profile$encodeProfileRequestResponse(_p7)
+								}),
+							_1: {ctor: '[]'}
+						});
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							_p8,
 							{
 								error: _elm_lang$core$Maybe$Just('unable create profile')
 							}),
@@ -12564,6 +12696,22 @@ var _user$project$Auth_Update$update = F2(
 							_1: {ctor: '[]'}
 						});
 				}
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						_p8,
+						{profile: _elm_lang$core$Maybe$Nothing, token: _elm_lang$core$Maybe$Nothing}),
+					{
+						ctor: '::',
+						_0: _user$project$Ports_LocalStorage$storageClear(
+							{ctor: '_Tuple0'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$navigation$Navigation$modifyUrl(''),
+							_1: {ctor: '[]'}
+						}
+					});
 		}
 	});
 
@@ -12802,7 +12950,8 @@ var _user$project$View$view = function (model) {
 						_elm_lang$html$Html$img,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$src(_p1.profile.profilePicture),
+							_0: _elm_lang$html$Html_Attributes$src(
+								A2(_elm_lang$core$Maybe$withDefault, '', _p1.profilePicture)),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$style(
@@ -12828,11 +12977,11 @@ var _user$project$View$view = function (model) {
 						_0: _elm_lang$html$Html$text(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
-								_p1.profile.fullName,
+								_p1.fullName,
 								A2(
 									_elm_lang$core$Basics_ops['++'],
 									' <',
-									A2(_elm_lang$core$Basics_ops['++'], _p1.profile.username, '>')))),
+									A2(_elm_lang$core$Basics_ops['++'], _p1.username, '>')))),
 						_1: {
 							ctor: '::',
 							_0: A2(

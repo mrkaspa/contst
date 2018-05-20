@@ -58,7 +58,7 @@ view model =
                         ]
                         [ text "fetching profile..." ]
 
-                ( _, Just profileData ) ->
+                ( _, Just profile ) ->
                     div
                         [ style
                             [ ( "display", "flex" )
@@ -67,7 +67,7 @@ view model =
                             ]
                         ]
                         [ img
-                            [ src profileData.profile.profilePicture
+                            [ src <| Maybe.withDefault "" profile.profilePicture
                             , style
                                 [ ( "height", "150px" )
                                 , ( "margin", "1em" )
@@ -75,7 +75,7 @@ view model =
                                 ]
                             ]
                             []
-                        , text <| profileData.profile.fullName ++ " <" ++ profileData.profile.username ++ ">"
+                        , text <| profile.fullName ++ " <" ++ profile.username ++ ">"
                         , a [ onClick (Auth Logout) ] [ text "Logout" ]
                         ]
     in

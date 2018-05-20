@@ -1,6 +1,6 @@
 port module Ports.LocalStorage exposing (..)
 
-import Auth.Profile exposing (profileData)
+import Auth.Profile exposing (profileRequestResponse)
 import Json.Decode as JDec
 import Json.Encode
 import Model exposing (AuthMsg(..), Msg(..))
@@ -18,7 +18,7 @@ receiveLocalStorage : ( Key, Value ) -> Msg
 receiveLocalStorage keyVal =
     case keyVal of
         ( "profile", profile ) ->
-            case JDec.decodeValue profileData profile of
+            case JDec.decodeValue profileRequestResponse profile of
                 Ok profile ->
                     Auth (ProfileLoaded profile)
 
